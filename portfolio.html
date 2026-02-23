@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viet Hung Nguyen — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=Libre+Franklin:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #faf7f2;
+  --bg-dark: #1a1a18;
+  --bg-warm: #f3efe8;
+  --text: #1a1a18;
+  --text-body: #3d3d3a;
+  --text-muted: #7a7a74;
+  --accent: #c4903e;
+  --accent-dark: #a07330;
+  --red: #b82e2e;
+  --green: #2a9d5c;
+  --blue: #1e3a6e;
+  --rule: #1a1a18;
+  --rule-light: #d4d0c8;
+  --serif: 'Playfair Display', 'Times New Roman', Georgia, serif;
+  --body-serif: 'Source Serif 4', Georgia, serif;
+  --sans: 'Libre Franklin', 'Helvetica Neue', sans-serif;
+  --mono: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--body-serif);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ════════ CURSOR ════════ */
+.cursor-dot {
+  position: fixed;
+  top: 0; left: 0;
+  width: 8px; height: 8px;
+  background: var(--text);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10002;
+  opacity: 0;
+  transition: opacity 0.3s, width 0.3s, height 0.3s, background 0.3s;
+  will-change: transform;
+}
+.cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  width: 40px; height: 40px;
+  border: 1.5px solid rgba(26,26,24,0.25);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10001;
+  opacity: 0;
+  transition: width 0.4s cubic-bezier(.25,.8,.25,1),
+              height 0.4s cubic-bezier(.25,.8,.25,1),
+              border-color 0.3s,
+              background 0.3s,
+              opacity 0.35s;
+  will-change: transform;
+}
+.cursor-glow {
+  position: fixed;
+  top: 0; left: 0;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(196,144,62,0.06) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.5s;
+  will-change: transform;
+}
+
+.cursor-dot.visible, .cursor-ring.visible { opacity: 1; }
+.cursor-glow.visible { opacity: 1; }
+
+.cursor-dot.hovering {
+  width: 4px; height: 4px;
+  background: var(--accent);
+}
+.cursor-ring.hovering {
+  width: 64px; height: 64px;
+  border-color: rgba(196,144,62,0.5);
+  background: rgba(196,144,62,0.05);
+}
+.cursor-dot.clicking { width: 12px; height: 12px; }
+.cursor-ring.clicking { width: 28px; height: 28px; border-color: var(--accent); }
+
+.cursor-ring.project-hover {
+  width: 80px; height: 80px;
+  border-color: var(--accent);
+  background: rgba(196,144,62,0.08);
+}
+.cursor-ring.project-hover::after {
+  content: '→';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+@media (hover: none), (pointer: coarse) {
+  .cursor-dot, .cursor-ring, .cursor-glow { display: none !important; }
+  html, body, a, button { cursor: auto !important; }
+}
+
+a, button, input, textarea, select { cursor: none; }
+@media (hover: none) { a, button, input, textarea, select { cursor: auto; } }
+
+/* ════════ NAV ════════ */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  background: var(--bg);
+  border-bottom: 2px solid var(--rule);
+  transition: box-shadow 0.3s;
+}
+
+.nav-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.9rem 3rem;
+  position: relative;
+}
+
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.nav-logo em { font-style: italic; color: var(--accent); }
+
+nav ul {
+  position: absolute;
+  right: 3rem;
+  display: flex;
+  gap: 1.75rem;
+  list-style: none;
+}
+
+nav ul a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 0.25s;
+}
+
+nav ul a:hover { color: var(--text); }
+
+.nav-scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+
+/* ════════ HERO ════════ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 8rem 2rem 5rem;
+  border-bottom: 3px double var(--rule);
+}
+
+.hero-dateline {
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards 0.1s;
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(3.5rem, 9vw, 8rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards 0.25s;
+}
+
+.hero h1 em { font-style: italic; display: block; }
+
+.hero-rule {
+  width: 60px;
+  height: 3px;
+  background: var(--rule);
+  margin: 0 auto 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards 0.4s;
+}
+
+.hero-sub {
+  max-width: 600px;
+  font-size: 1.2rem;
+  color: var(--text-body);
+  line-height: 1.8;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards 0.5s;
+}
+
+.hero-ticker {
+  display: flex;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards 0.65s;
+}
+
+.ticker-item {
+  padding: 1.25rem 2.5rem;
+  text-align: center;
+  border-right: 1px solid var(--rule-light);
+}
+.ticker-item:last-child { border-right: none; }
+
+.ticker-value {
+  font-family: var(--serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.ticker-label {
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+  font-weight: 600;
+}
+
+/* ════════ SECTION GENERAL ════════ */
+section { padding: 5rem 3rem; }
+
+.section-header { text-align: center; margin-bottom: 3.5rem; }
+
+.section-kicker {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.section-headline {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.section-rule {
+  width: 40px;
+  height: 2px;
+  background: var(--rule);
+  margin: 1rem auto 0;
+}
+
+/* ════════ ABOUT ════════ */
+#about { border-bottom: 1px solid var(--rule-light); }
+
+.about-layout {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.about-text { font-size: 1.05rem; color: var(--text-body); line-height: 1.85; }
+.about-text p + p { margin-top: 1.25rem; }
+.about-text strong { color: var(--text); font-weight: 600; }
+
+.about-text .dropcap::first-letter {
+  font-family: var(--serif);
+  font-size: 4.5rem;
+  float: left;
+  line-height: 0.8;
+  margin-right: 0.15em;
+  margin-top: 0.05em;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.about-sidebar {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--rule);
+}
+
+.sidebar-item {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--rule-light);
+  transition: background 0.25s;
+}
+.sidebar-item:last-child { border-bottom: none; }
+.sidebar-item:hover { background: var(--bg-warm); }
+
+.sidebar-label {
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.sidebar-value { font-family: var(--serif); font-size: 1.05rem; font-weight: 700; }
+.sidebar-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.1rem; }
+
+/* ════════ PROJECTS ════════ */
+#projects {
+  background: var(--bg-dark);
+  color: #f5f0e8;
+  border-top: 4px solid var(--rule);
+  border-bottom: 4px solid var(--rule);
+}
+
+#projects .section-kicker { color: var(--accent); }
+#projects .section-headline { color: #f5f0e8; }
+#projects .section-rule { background: #f5f0e8; }
+
+.projects-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.project-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.4s;
+  overflow: hidden;
+}
+
+.project-card:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(196,144,62,0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+}
+
+/* ── CSS-only project previews ── */
+.project-preview {
+  min-height: 320px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2.5rem;
+}
+
+.project-card:hover .project-preview { filter: brightness(1.05); }
+
+/* Eli Lilly Preview */
+.preview-lilly {
+  background: linear-gradient(160deg, #0d1722 0%, #152035 60%, #1a2840 100%);
+}
+.preview-lilly .pv-kicker {
+  font-family: var(--sans);
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--accent);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.preview-lilly .pv-kicker::before { content: ''; width: 30px; height: 1.5px; background: var(--accent); }
+.preview-lilly .pv-title {
+  font-family: var(--serif);
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #f5f0e8;
+  line-height: 1.05;
+  margin-bottom: 1.75rem;
+}
+.preview-lilly .pv-title em { font-style: italic; }
+.preview-lilly .pv-metrics {
+  display: flex;
+  gap: 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: auto;
+}
+.preview-lilly .pv-metric {
+  padding: 0.9rem 1.25rem 0;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+.preview-lilly .pv-metric:last-child { border-right: none; }
+.pv-metric-val {
+  font-family: var(--mono);
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+.pv-metric-val.green { color: var(--green); }
+.pv-metric-val.gold { color: var(--accent); }
+.pv-metric-val.white { color: #f5f0e8; }
+.pv-metric-label {
+  font-family: var(--sans);
+  font-size: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(245,240,232,0.4);
+  margin-top: 0.15rem;
+  font-weight: 600;
+}
+.preview-lilly .pv-badge {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: var(--green);
+  color: #0d1722;
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.3rem 0.75rem;
+  border-radius: 3px;
+  letter-spacing: 0.08em;
+}
+
+/* Fed Rate Preview */
+.preview-fed {
+  background: var(--bg);
+  color: var(--text);
+  align-items: center;
+  text-align: center;
+}
+.preview-fed .pv-topbar {
+  width: 100%;
+  padding-bottom: 0.6rem;
+  border-bottom: 2.5px solid var(--text);
+  margin-bottom: 1.5rem;
+  font-family: var(--serif);
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text);
+}
+.preview-fed .pv-headline {
+  font-family: var(--serif);
+  font-size: 2.2rem;
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1.1;
+  margin-bottom: 1.75rem;
+  color: var(--text);
+}
+.preview-fed .pv-stats {
+  display: flex;
+  width: 100%;
+  border-top: 1px solid var(--rule-light);
+}
+.preview-fed .pv-stat {
+  flex: 1;
+  padding: 1rem 0.5rem 0;
+  border-right: 1px solid var(--rule-light);
+  text-align: center;
+}
+.preview-fed .pv-stat:last-child { border-right: none; }
+.pv-stat-val {
+  font-family: var(--serif);
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+.pv-stat-label {
+  font-family: var(--sans);
+  font-size: 0.48rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  font-weight: 600;
+}
+
+/* Snowflake Preview */
+.preview-snow {
+  background: var(--bg);
+  padding: 0;
+}
+.preview-snow-top {
+  background: var(--bg-dark);
+  padding: 1.5rem 2.5rem 1.25rem;
+  text-align: center;
+}
+.preview-snow-top .pv-date {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: rgba(245,240,232,0.4);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.preview-snow-top .pv-company {
+  font-family: var(--serif);
+  font-size: 2.8rem;
+  font-weight: 900;
+  font-style: italic;
+  color: #f5f0e8;
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+.preview-snow-top .pv-ticker {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  color: rgba(245,240,232,0.4);
+  text-transform: uppercase;
+}
+.preview-snow-mid {
+  display: flex;
+  border-bottom: 1px solid var(--rule-light);
+}
+.preview-snow-mid .pv-cell {
+  flex: 1;
+  padding: 1rem 1rem;
+  text-align: center;
+  border-right: 1px solid var(--rule-light);
+}
+.preview-snow-mid .pv-cell:last-child { border-right: none; }
+.pv-cell-label {
+  font-family: var(--sans);
+  font-size: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+.pv-cell-val {
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+.pv-cell-val.red { color: var(--red); }
+.pv-cell-val.gold { color: var(--accent); }
+
+.preview-snow-badge {
+  display: inline-block;
+  border: 1.5px solid var(--accent);
+  padding: 0.15rem 0.6rem;
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+}
+.preview-snow-bottom {
+  padding: 1.5rem 2.5rem;
+}
+.preview-snow-bottom .pv-thesis {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text);
+}
+.preview-snow-bottom .pv-thesis em {
+  font-style: italic;
+  color: var(--blue);
+}
+
+/* Project info side */
+.project-info {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.project-kicker {
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.project-name {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 0.75rem;
+  color: #f5f0e8;
+}
+
+.project-desc {
+  font-family: var(--body-serif);
+  font-size: 0.95rem;
+  color: rgba(245,240,232,0.65);
+  line-height: 1.75;
+  margin-bottom: 1.25rem;
+}
+
+.project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+
+.project-tag {
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.65rem;
+  border: 1px solid rgba(196,144,62,0.3);
+  color: var(--accent);
+}
+
+.project-link {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: gap 0.3s;
+}
+
+.project-card:hover .project-link { gap: 0.75rem; }
+.project-link svg { width: 14px; height: 14px; }
+.project-card.reverse { direction: rtl; }
+.project-card.reverse > * { direction: ltr; }
+
+/* ════════ EXPERIENCE ════════ */
+#experience { border-bottom: 1px solid var(--rule-light); }
+
+.timeline { max-width: 800px; margin: 0 auto; position: relative; }
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--rule);
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 3rem;
+  padding-bottom: 2.75rem;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -4px; top: 5px;
+  width: 10px; height: 10px;
+  background: var(--bg);
+  border: 2px solid var(--rule);
+  border-radius: 50%;
+}
+
+.timeline-item:first-child::before { background: var(--accent); border-color: var(--accent); }
+.timeline-item:last-child { padding-bottom: 0; }
+
+.tl-date {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.tl-role { font-family: var(--serif); font-size: 1.3rem; font-weight: 700; line-height: 1.25; margin-bottom: 0.15rem; }
+.tl-org { font-size: 0.95rem; color: var(--text-muted); font-style: italic; margin-bottom: 0.65rem; }
+.tl-skills { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+
+.tl-skill {
+  font-family: var(--sans);
+  font-size: 0.58rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.55rem;
+  background: var(--bg-warm);
+  border: 1px solid var(--rule-light);
+  color: var(--text-body);
+}
+
+/* ════════ SKILLS ════════ */
+#skills {
+  background: var(--bg-warm);
+  border-top: 1px solid var(--rule-light);
+  border-bottom: 1px solid var(--rule-light);
+}
+
+.skills-grid {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--rule);
+}
+
+.skill-group {
+  padding: 2rem;
+  border-right: 1px solid var(--rule-light);
+  transition: background 0.3s;
+}
+.skill-group:last-child { border-right: none; }
+.skill-group:hover { background: rgba(255,255,255,0.5); }
+
+.skill-group h3 {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent-dark);
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--rule);
+}
+
+.skill-list { display: flex; flex-direction: column; gap: 0.5rem; }
+.skill-list span { font-size: 0.9rem; color: var(--text-body); }
+
+/* ════════ CONTACT ════════ */
+#contact {
+  text-align: center;
+  padding: 6rem 3rem;
+  border-bottom: 3px double var(--rule);
+}
+
+#contact .section-headline { font-style: italic; }
+
+.contact-intro {
+  max-width: 520px;
+  margin: 0 auto 2.5rem;
+  font-size: 1.1rem;
+  color: var(--text-body);
+  line-height: 1.8;
+}
+
+.contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1.5px solid var(--rule);
+  color: var(--text);
+  transition: all 0.3s;
+}
+
+.contact-link:hover { background: var(--text); color: var(--bg); }
+
+.contact-link.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+.contact-link.primary:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* ════════ FOOTER ════════ */
+footer {
+  padding: 1.5rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ════════ ANIMATIONS ════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ════════ RESPONSIVE ════════ */
+@media (max-width: 900px) {
+  nav ul { display: none; }
+  .nav-main { padding: 0.8rem 1.5rem; }
+  section { padding: 3.5rem 1.5rem; }
+  .hero { padding: 7rem 1.5rem 3rem; }
+  .about-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .project-card, .project-card.reverse { grid-template-columns: 1fr; direction: ltr; }
+  .project-preview { min-height: 240px; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .skill-group { border-right: none; border-bottom: 1px solid var(--rule-light); }
+  .skill-group:last-child { border-bottom: none; }
+  .hero-ticker { flex-wrap: wrap; }
+  .ticker-item { flex: 1; min-width: 120px; }
+  .contact-links { flex-direction: column; align-items: center; }
+}
+
+@media (max-width: 600px) {
+  .hero h1 { font-size: 3rem; }
+  .section-headline { font-size: 1.8rem; }
+  .project-name { font-size: 1.5rem; }
+  .preview-lilly .pv-title { font-size: 1.8rem; }
+  .preview-fed .pv-headline { font-size: 1.5rem; }
+  .preview-snow-top .pv-company { font-size: 1.8rem; }
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--rule); }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-main">
+    <a href="#" class="nav-logo">Viet Hung <em>Nguyen</em></a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-dateline">University of South Florida · AI & Business Analytics · Class of '28</div>
+  <h1>Viet Hung<em>Nguyen</em></h1>
+  <div class="hero-rule"></div>
+  <p class="hero-sub">
+    Student athlete and collegiate powerlifter at USF. No shortcuts under the barbell, 
+    no shortcuts in the model. Bringing process-driven analytical rigor to asset management, 
+    equity research, and quantitative finance.
+  </p>
+  <div class="hero-ticker">
+    <div class="ticker-item">
+      <div class="ticker-value">3</div>
+      <div class="ticker-label">Research Projects</div>
+    </div>
+    <div class="ticker-item">
+      <div class="ticker-value">5+</div>
+      <div class="ticker-label">Finance Roles</div>
+    </div>
+    <div class="ticker-item">
+      <div class="ticker-value">AI&BA</div>
+      <div class="ticker-label">Major</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header">
+    <div class="section-kicker">Profile</div>
+    <div class="section-headline">Process Over Everything</div>
+    <div class="section-rule"></div>
+  </div>
+  <div class="about-layout">
+    <div class="about-text fade-in">
+      <p class="dropcap">If you can't find me at a desk, I'm probably under a barbell. As a <strong>collegiate powerlifter for USF</strong>, 
+      I've learned that there are no shortcuts to a heavy squat — it's all about patience, structure, and showing up every day.</p>
+      <p>I bring that same mentality to financial analysis. Whether I'm digging through a valuation model, 
+      building an ensemble forecasting pipeline, or fine-tuning an underwriting model, I'm driven by the 
+      <strong>small details that make a big impact</strong>.</p>
+      <p>Pursuing a degree in <strong>AI & Business Analytics</strong> at the University of South Florida, 
+      I combine quantitative rigor with financial intuition. Now looking to bring that grit and analytical 
+      focus to a team as an <strong>Asset Management Analyst</strong>.</p>
+    </div>
+    <div class="about-sidebar fade-in">
+      <div class="sidebar-item">
+        <div class="sidebar-label">Education</div>
+        <div class="sidebar-value">University of South Florida</div>
+        <div class="sidebar-sub">AI & Business Analytics</div>
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-label">Focus</div>
+        <div class="sidebar-value">Quantitative & Corporate Finance</div>
+        <div class="sidebar-sub">Valuation, Accounting, Modeling</div>
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-label">Athletics</div>
+        <div class="sidebar-value">Collegiate Powerlifter</div>
+        <div class="sidebar-sub">USF</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header">
+    <div class="section-kicker">Selected Work</div>
+    <div class="section-headline">Featured Research & Projects</div>
+    <div class="section-rule"></div>
+  </div>
+  <div class="projects-grid">
+
+    <!-- Eli Lilly -->
+    <a class="project-card fade-in" href="https://nvhung010606.github.io/elilillywebsite/" target="_blank" rel="noopener">
+      <div class="project-preview preview-lilly">
+        <span class="pv-badge">BUY</span>
+        <div class="pv-kicker">Investment Memo · February 2026</div>
+        <div class="pv-title">Eli Lilly<br><em>& Company</em></div>
+        <div class="pv-metrics">
+          <div class="pv-metric">
+            <div class="pv-metric-val green">$1,509</div>
+            <div class="pv-metric-label">Price Target</div>
+          </div>
+          <div class="pv-metric">
+            <div class="pv-metric-val white">$929B</div>
+            <div class="pv-metric-label">Market Cap</div>
+          </div>
+          <div class="pv-metric">
+            <div class="pv-metric-val green">+45%</div>
+            <div class="pv-metric-label">Upside</div>
+          </div>
+          <div class="pv-metric">
+            <div class="pv-metric-val gold">0.76x</div>
+            <div class="pv-metric-label">PEG Ratio</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-info">
+        <div class="project-kicker">Investment Memo · Equity Research</div>
+        <div class="project-name">Eli Lilly & Company</div>
+        <p class="project-desc">
+          A full-stack investment memo identifying three mispriced catalysts over a 3–12 month horizon. 
+          Interactive web application with financial analysis and a $1,509 price target representing 45% upside.
+        </p>
+        <div class="project-tags">
+          <span class="project-tag">Valuation</span>
+          <span class="project-tag">DCF</span>
+          <span class="project-tag">GLP-1</span>
+          <span class="project-tag">Web App</span>
+        </div>
+        <span class="project-link">
+          View Project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <!-- Fed Rate Forecaster -->
+    <a class="project-card reverse fade-in" href="https://nvhung010606.github.io/macro-event-tracker/" target="_blank" rel="noopener">
+      <div class="project-preview preview-fed">
+        <div class="pv-topbar">The Fed Rate Forecaster</div>
+        <div class="pv-headline">What the Fed<br>Does Next</div>
+        <div class="pv-stats">
+          <div class="pv-stat">
+            <div class="pv-stat-val">62.3%</div>
+            <div class="pv-stat-label">Probability Fed Holds</div>
+          </div>
+          <div class="pv-stat">
+            <div class="pv-stat-val">22.3%</div>
+            <div class="pv-stat-label">Probability of 25bp Cut</div>
+          </div>
+          <div class="pv-stat">
+            <div class="pv-stat-val">25</div>
+            <div class="pv-stat-label">Days Until FOMC</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-info">
+        <div class="project-kicker">Quantitative Model · Macro</div>
+        <div class="project-name">The Fed Rate Forecaster</div>
+        <p class="project-desc">
+          An ensemble model blending economic fundamentals with market-implied probabilities to forecast 
+          the Federal Reserve's rate decisions. Real-time pipeline, interactive charts, and methodology-first approach.
+        </p>
+        <div class="project-tags">
+          <span class="project-tag">Python</span>
+          <span class="project-tag">Ensemble Model</span>
+          <span class="project-tag">FOMC</span>
+          <span class="project-tag">Pipeline</span>
+        </div>
+        <span class="project-link">
+          View Project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <!-- Snowflake -->
+    <a class="project-card fade-in" href="https://nvhung010606.github.io/snowflakewebsite/" target="_blank" rel="noopener">
+      <div class="project-preview preview-snow">
+        <div class="preview-snow-top">
+          <div class="pv-date">November 30, 2025 · Equity Research</div>
+          <div class="pv-company">Snowflake Inc.</div>
+          <div class="pv-ticker">NYSE: SNOW · Cloud Computing · Software</div>
+        </div>
+        <div class="preview-snow-mid">
+          <div class="pv-cell">
+            <div class="pv-cell-label">Current Price</div>
+            <div class="pv-cell-val">$241.99</div>
+          </div>
+          <div class="pv-cell">
+            <div class="pv-cell-label">Target Price</div>
+            <div class="pv-cell-val gold">$210.48</div>
+          </div>
+          <div class="pv-cell">
+            <div class="pv-cell-label">Implied Return</div>
+            <div class="pv-cell-val red">−5.44%</div>
+          </div>
+          <div class="pv-cell">
+            <div class="pv-cell-label">Recommendation</div>
+            <div class="preview-snow-badge">HOLD</div>
+          </div>
+        </div>
+        <div class="preview-snow-bottom">
+          <div class="pv-thesis">A Data Giant at a Crossroads:<br><em>Strong Foundations, Stretched Valuation</em></div>
+        </div>
+      </div>
+      <div class="project-info">
+        <div class="project-kicker">Equity Research · Stock Pitch</div>
+        <div class="project-name">Snowflake Inc.</div>
+        <p class="project-desc">
+          Comprehensive equity research covering thesis, financials, industry analysis, comparable companies, 
+          valuation, and risk assessment. Presented through Scholars of Finance at USF.
+        </p>
+        <div class="project-tags">
+          <span class="project-tag">Comps</span>
+          <span class="project-tag">Cloud</span>
+          <span class="project-tag">SaaS</span>
+          <span class="project-tag">Valuation</span>
+        </div>
+        <span class="project-link">
+          View Project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header">
+    <div class="section-kicker">Career</div>
+    <div class="section-headline">Professional Experience</div>
+    <div class="section-rule"></div>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item fade-in">
+      <div class="tl-date">Feb 2026 — Present</div>
+      <div class="tl-role">Quantitative Analyst & Investment Banking Analyst</div>
+      <div class="tl-org">Private Equity and Venture Capital Club at USF</div>
+      <div class="tl-skills">
+        <span class="tl-skill">Mathematics</span>
+        <span class="tl-skill">Futures & Options</span>
+        <span class="tl-skill">Investment Banking</span>
+      </div>
+    </div>
+    <div class="timeline-item fade-in">
+      <div class="tl-date">Sep 2025 — Present</div>
+      <div class="tl-role">Member</div>
+      <div class="tl-org">Scholars of Finance at USF</div>
+      <div class="tl-skills">
+        <span class="tl-skill">Valuation</span>
+        <span class="tl-skill">Accounting</span>
+        <span class="tl-skill">Stock Pitches</span>
+      </div>
+    </div>
+    <div class="timeline-item fade-in">
+      <div class="tl-date">Feb 2026</div>
+      <div class="tl-role">Investment Banking & Financial Modelling Bootcamp</div>
+      <div class="tl-org">Wall Street Oasis</div>
+      <div class="tl-skills">
+        <span class="tl-skill">Financial Modeling</span>
+        <span class="tl-skill">LBO</span>
+        <span class="tl-skill">DCF</span>
+      </div>
+    </div>
+    <div class="timeline-item fade-in">
+      <div class="tl-date">Dec 2025 — Feb 2026</div>
+      <div class="tl-role">Private Equity Intern</div>
+      <div class="tl-org">Project Destined</div>
+      <div class="tl-skills">
+        <span class="tl-skill">Cash Flow Forecasting</span>
+        <span class="tl-skill">Commercial Real Estate</span>
+        <span class="tl-skill">Underwriting</span>
+      </div>
+    </div>
+    <div class="timeline-item fade-in">
+      <div class="tl-date">Dec 2025 — Feb 2026</div>
+      <div class="tl-role">Associate</div>
+      <div class="tl-org">GenAI Fund</div>
+      <div class="tl-skills">
+        <span class="tl-skill">Venture Capital</span>
+        <span class="tl-skill">Pitch Decks</span>
+        <span class="tl-skill">Due Diligence</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header">
+    <div class="section-kicker">Toolkit</div>
+    <div class="section-headline">Skills & Competencies</div>
+    <div class="section-rule"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-group fade-in">
+      <h3>Finance & Analysis</h3>
+      <div class="skill-list">
+        <span>Quantitative Finance</span>
+        <span>Corporate Finance</span>
+        <span>Valuation (DCF, Comps, LBO)</span>
+        <span>Cash Flow Forecasting</span>
+        <span>Equity Research</span>
+        <span>Underwriting</span>
+      </div>
+    </div>
+    <div class="skill-group fade-in">
+      <h3>Technical</h3>
+      <div class="skill-list">
+        <span>Python (Data Pipelines)</span>
+        <span>Financial Modeling (Excel)</span>
+        <span>Bloomberg Terminal</span>
+        <span>HTML / CSS / JavaScript</span>
+        <span>Ensemble Modeling</span>
+        <span>Data Visualization</span>
+      </div>
+    </div>
+    <div class="skill-group fade-in">
+      <h3>Certifications</h3>
+      <div class="skill-list">
+        <span>Bloomberg Market Concepts</span>
+        <span>WSP Financial Modelling</span>
+        <span>Excel for Investment Banking WSO</span>
+        <span>Python for Data Analytics</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header">
+    <div class="section-kicker">Get in Touch</div>
+    <div class="section-headline">Let's Talk Markets</div>
+    <div class="section-rule"></div>
+  </div>
+  <p class="contact-intro">
+    Currently seeking opportunities in asset management, equity research, and quantitative analysis. 
+    Always happy to discuss ideas and connect.
+  </p>
+  <div class="contact-links">
+    <a href="mailto:nvhung010606@gmail.com" class="contact-link primary">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7L13.03 12.7a1.94 1.94 0 01-2.06 0L2 7"/></svg>
+      nvhung010606@gmail.com
+    </a>
+    <a href="https://www.linkedin.com/in/viethungnguyenusf" target="_blank" class="contact-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg>
+      LinkedIn
+    </a>
+    <a href="https://github.com/nvhung010606" target="_blank" class="contact-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      GitHub
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div>© 2026 Viet Hung Nguyen</div>
+  <div>Built with precision.</div>
+</footer>
+
+<script>
+// Intersection Observer
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').classList.toggle('nav-scrolled', window.scrollY > 30);
+});
+
+// ═══════ THREE-LAYER FLUID CURSOR ═══════
+(function() {
+  var dot = document.getElementById('cursorDot');
+  var ring = document.getElementById('cursorRing');
+  var glow = document.getElementById('cursorGlow');
+  if (!dot || !ring || !glow || 'ontouchstart' in window) return;
+
+  var mouseX = -100, mouseY = -100;
+  // Dot — fast, tight follow
+  var dotX = -100, dotY = -100, dotVx = 0, dotVy = 0;
+  // Ring — springy, organic
+  var ringX = -100, ringY = -100, ringVx = 0, ringVy = 0;
+  // Glow — slow drift
+  var glowX = -100, glowY = -100, glowVx = 0, glowVy = 0;
+
+  var visible = false;
+
+  function animate() {
+    // Dot: stiff spring
+    dotVx += (mouseX - dotX) * 0.25;
+    dotVy += (mouseY - dotY) * 0.25;
+    dotVx *= 0.55;
+    dotVy *= 0.55;
+    dotX += dotVx;
+    dotY += dotVy;
+
+    // Ring: springy
+    ringVx += (mouseX - ringX) * 0.08;
+    ringVy += (mouseY - ringY) * 0.08;
+    ringVx *= 0.68;
+    ringVy *= 0.68;
+    ringX += ringVx;
+    ringY += ringVy;
+
+    // Glow: slow, dreamy
+    glowVx += (mouseX - glowX) * 5;
+    glowVy += (mouseY - glowY) * 5;
+    glowVx *= 0.1;
+    glowVy *= 0.1;
+    glowX += glowVx;
+    glowY += glowVy;
+
+    // Ring organic deformation
+    var ringSpeed = Math.sqrt(ringVx * ringVx + ringVy * ringVy);
+    var stretch = Math.min(ringSpeed * 1.2, 18);
+    var angle = Math.atan2(ringVy, ringVx) * (180 / Math.PI);
+    var scaleX = 1 + stretch * 0.02;
+    var scaleY = 1 - stretch * 0.012;
+    var wobble = Math.sin(Date.now() * 0.003) * 0.5;
+
+    dot.style.transform = 'translate(' + dotX + 'px,' + dotY + 'px) translate(-50%,-50%)';
+    ring.style.transform = 'translate(' + ringX + 'px,' + ringY + 'px) translate(-50%,-50%) rotate(' + (angle + wobble) + 'deg) scale(' + scaleX + ',' + scaleY + ')';
+    glow.style.transform = 'translate(' + glowX + 'px,' + glowY + 'px) translate(-50%,-50%)';
+
+    requestAnimationFrame(animate);
+  }
+
+  document.addEventListener('mousemove', function(e) {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    if (!visible) {
+      visible = true;
+      dot.classList.add('visible');
+      ring.classList.add('visible');
+      glow.classList.add('visible');
+      dotX = ringX = glowX = mouseX;
+      dotY = ringY = glowY = mouseY;
+    }
+  });
+
+  document.addEventListener('mousedown', function() { dot.classList.add('clicking'); ring.classList.add('clicking'); });
+  document.addEventListener('mouseup', function() { dot.classList.remove('clicking'); ring.classList.remove('clicking'); });
+
+  document.addEventListener('mouseleave', function() {
+    visible = false;
+    dot.classList.remove('visible');
+    ring.classList.remove('visible');
+    glow.classList.remove('visible');
+  });
+  document.addEventListener('mouseenter', function() {
+    visible = true;
+    dot.classList.add('visible');
+    ring.classList.add('visible');
+    glow.classList.add('visible');
+  });
+
+  // Hover: generic interactive elements
+  document.querySelectorAll('a:not(.project-card), button, .sidebar-item, .skill-group, .contact-link, .project-tag, .tl-skill').forEach(function(el) {
+    el.addEventListener('mouseenter', function() { dot.classList.add('hovering'); ring.classList.add('hovering'); });
+    el.addEventListener('mouseleave', function() { dot.classList.remove('hovering'); ring.classList.remove('hovering'); });
+  });
+
+  // Special hover for project cards — shows arrow
+  document.querySelectorAll('.project-card').forEach(function(el) {
+    el.addEventListener('mouseenter', function() {
+      dot.classList.add('hovering');
+      ring.classList.add('project-hover');
+      dot.style.opacity = '0';
+    });
+    el.addEventListener('mouseleave', function() {
+      dot.classList.remove('hovering');
+      ring.classList.remove('project-hover');
+      dot.style.opacity = '';
+    });
+  });
+
+  requestAnimationFrame(animate);
+})();
+</script>
+
+</body>
+</html>
