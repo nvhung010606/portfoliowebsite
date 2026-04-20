@@ -1,0 +1,1070 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Louis (Hung) Nguyen — AI & Business Analytics at USF. Valuation, credit, applied ML, and a deep bench of analytical rigor." />
+  <meta name="theme-color" content="#18181B" />
+  <meta property="og:title" content="Louis (Hung) Nguyen — AI & Business Analytics" />
+  <meta property="og:description" content="Student analyst at the intersection of finance and AI. USF · 3.93 GPA · Dean's List." />
+  <meta property="og:type" content="website" />
+  <title>Louis (Hung) Nguyen — AI & Business Analytics</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2318181B'/><text x='50' y='76' font-family='Georgia,serif' font-size='72' font-weight='bold' text-anchor='middle' fill='%23FAFAFA'>L</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" />
+  <style>
+/* ==========================================================================
+   Design tokens — Trust & Authority, monochrome + blue accent
+   ========================================================================== */
+:root {
+  color-scheme: light;
+  --color-background: #FAFAFA;
+  --color-surface: #FFFFFF;
+  --color-surface-alt: #F4F4F5;
+  --color-foreground: #09090B;
+  --color-primary: #18181B;
+  --color-secondary: #3F3F46;
+  --color-muted-fg: #52525B;
+  --color-muted: #E8ECF0;
+  --color-border: #E4E4E7;
+  --color-border-strong: #D4D4D8;
+  --color-accent: #2563EB;
+  --color-accent-hover: #1D4ED8;
+  --color-accent-soft: rgba(37, 99, 235, 0.08);
+  --color-ring: #18181B;
+  --color-success: #16A34A;
+  --font-display: "EB Garamond", "Garamond", "Apple Garamond", "Times New Roman", Times, serif;
+  --font-body: "EB Garamond", "Garamond", "Apple Garamond", "Times New Roman", Times, serif;
+  --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px; --radius-xl: 22px; --radius-pill: 999px;
+  --shadow-1: 0 1px 2px rgba(9,9,11,.04), 0 1px 1px rgba(9,9,11,.03);
+  --shadow-2: 0 4px 12px rgba(9,9,11,.05), 0 2px 4px rgba(9,9,11,.04);
+  --shadow-3: 0 12px 32px rgba(9,9,11,.08), 0 4px 8px rgba(9,9,11,.04);
+  --container-max: 1180px;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --section-y: clamp(4rem, 9vw, 7rem);
+  --nav-h: 64px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 150ms; --dur-mid: 240ms; --dur-slow: 380ms;
+}
+*,*::before,*::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 16px); -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-foreground);
+  background: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--dur-mid) var(--ease), color var(--dur-mid) var(--ease);
+}
+h1,h2,h3,h4 { font-family: var(--font-display); letter-spacing: -0.02em; line-height: 1.1; color: var(--color-primary); margin: 0; }
+p { margin: 0; }
+a { color: inherit; text-decoration: none; transition: color var(--dur-fast) var(--ease); }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+button { font: inherit; cursor: pointer; color: inherit; }
+:focus-visible { outline: 2px solid var(--color-ring); outline-offset: 3px; border-radius: var(--radius-sm); }
+.skip-link {
+  position: absolute; left: -9999px; top: 0;
+  background: var(--color-primary); color: var(--color-surface);
+  padding: 10px 16px; border-radius: var(--radius-md); z-index: 100;
+}
+.skip-link:focus { left: 16px; top: 16px; }
+.container { width: 100%; max-width: var(--container-max); margin: 0 auto; padding-inline: var(--gutter); }
+.eyebrow {
+  font-family: var(--font-display); font-size: 0.8125rem; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-muted-fg); margin: 0 0 1rem;
+}
+.accent-text { color: var(--color-accent); }
+
+/* Navigation */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--color-background) 80%, transparent);
+  backdrop-filter: saturate(140%) blur(12px);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur-mid) var(--ease), background-color var(--dur-mid) var(--ease);
+}
+.nav.is-scrolled { border-bottom-color: var(--color-border); }
+.nav__inner { display: flex; align-items: center; justify-content: space-between; height: var(--nav-h); gap: 24px; }
+.nav__brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-family: var(--font-display); letter-spacing: -0.01em; transition: color var(--dur-mid) var(--ease); }
+.nav__brand:hover { color: var(--color-accent); }
+.nav__links { display: none; gap: 28px; font-size: 0.9375rem; }
+.nav__links a {
+  position: relative;
+  color: var(--color-muted-fg);
+  font-weight: 500;
+  padding-bottom: 3px;
+  transition: color var(--dur-mid) var(--ease);
+}
+.nav__links a::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%; height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform var(--dur-mid) var(--ease);
+}
+.nav__links a:hover,
+.nav__links a.is-active { color: var(--color-primary); }
+.nav__links a:hover::after,
+.nav__links a.is-active::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+@media (min-width: 768px) { .nav__links { display: flex; } }
+
+/* Buttons */
+.btn {
+  --magnet-x: 0px; --magnet-y: 0px;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 20px; border-radius: var(--radius-md);
+  font-family: var(--font-display); font-weight: 500; font-size: 0.9375rem;
+  border: 1px solid transparent;
+  transform: translate3d(var(--magnet-x), var(--magnet-y), 0);
+  transition: background-color var(--dur-mid) var(--ease),
+              border-color var(--dur-mid) var(--ease),
+              color var(--dur-mid) var(--ease),
+              box-shadow var(--dur-mid) var(--ease);
+  cursor: pointer;
+}
+.btn svg { width: 16px; height: 16px; transition: transform var(--dur-mid) var(--ease); }
+.btn--primary { background: var(--color-primary); color: var(--color-background); }
+.btn--primary:hover { background: var(--color-accent); box-shadow: var(--shadow-2); }
+.btn--primary:hover svg { transform: translateX(3px); }
+.btn--ghost { background: transparent; color: var(--color-primary); border-color: var(--color-border-strong); }
+.btn--ghost:hover { background: var(--color-muted); border-color: var(--color-primary); box-shadow: var(--shadow-1); }
+
+/* Hero */
+.hero {
+  position: relative;
+  min-height: calc(100vh - var(--nav-h));
+  display: flex;
+  padding-top: clamp(2rem, 6vh, 4rem);
+  padding-bottom: clamp(2rem, 4vh, 3rem);
+  overflow: hidden; isolation: isolate;
+}
+.hero__aurora {
+  position: absolute; inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.hero__aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  will-change: transform;
+}
+.hero__aurora-blob--1 {
+  width: 720px; height: 720px;
+  top: -200px; right: -140px;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.38), transparent 70%);
+}
+.hero__aurora-blob--2 {
+  width: 560px; height: 560px;
+  top: 20%; right: 18%;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.28), transparent 70%);
+}
+.hero__aurora-blob--3 {
+  width: 480px; height: 480px;
+  bottom: -180px; right: 10%;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.22), transparent 70%);
+}
+.hero__inner {
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(2.5rem, 8vh, 6rem);
+  width: 100%;
+  flex: 1;
+}
+.hero__headline {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: clamp(1rem, 3vw, 2rem);
+}
+.hero__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(4.5rem, 16vw, 13rem);
+  line-height: 0.88;
+  letter-spacing: -0.045em;
+  color: var(--color-primary);
+  display: flex; flex-direction: column;
+}
+.hero__name-line { display: block; }
+.hero__portrait {
+  --magnet-x: 0px; --magnet-y: 0px;
+  margin: 0;
+  width: clamp(88px, 11vw, 160px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-2);
+  flex-shrink: 0;
+  transform: translate3d(var(--magnet-x), var(--magnet-y), 0);
+  transition: transform var(--dur-mid) var(--ease), box-shadow var(--dur-mid) var(--ease);
+}
+.hero__portrait:hover { box-shadow: var(--shadow-3); }
+.hero__portrait img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.hero__foot {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  align-items: end;
+}
+@media (min-width: 768px) {
+  .hero__foot { grid-template-columns: auto 1fr; gap: clamp(2rem, 6vw, 4rem); }
+  .hero__foot .hero__lede { justify-self: end; max-width: 52ch; }
+}
+.hero__email {
+  position: relative;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 0; border: 0; background: transparent;
+  font-family: var(--font-body);
+  font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
+  color: var(--color-primary);
+  cursor: pointer;
+  align-self: end;
+}
+.hero__email-icon { width: 16px; height: 16px; flex-shrink: 0; }
+.email-cursor-pill {
+  position: fixed; top: 0; left: 0; z-index: 9999;
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 7px 20px; border-radius: 999px;
+  background: #111; color: #fff;
+  font-family: var(--font-body); font-size: 0.875rem; font-weight: 500;
+  white-space: nowrap; pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.85);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.email-cursor-pill.is-visible {
+  opacity: 1; transform: translate(-50%, -50%) scale(1);
+}
+.hero__eyebrow {
+  display: inline-flex; align-items: center; gap: 10px; align-self: flex-start;
+  padding: 6px 14px; border-radius: var(--radius-pill);
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  font-size: 0.8125rem; font-weight: 500; color: var(--color-muted-fg);
+  box-shadow: var(--shadow-1);
+}
+.dot {
+  width: 8px; height: 8px; border-radius: 999px; background: var(--color-success);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-success) 25%, transparent);
+  animation: pulse 2.2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.55; } }
+.hero__title { font-size: clamp(2.5rem, 7vw, 5rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.02; }
+.hero__lede {
+  margin: 0;
+  font-size: clamp(1.125rem, 1.5vw, 1.375rem);
+  color: var(--color-primary);
+  line-height: 1.45;
+  min-height: calc(1.45em * 2);
+}
+.hero__lede strong { color: var(--color-primary); font-weight: 600; }
+.hero__lede-text {
+  display: inline-block;
+  will-change: opacity, transform;
+}
+.hero__lede-text.is-shifting-out {
+  animation: lede-shift-out 220ms var(--ease) forwards;
+}
+.hero__lede-text.is-shifting-in {
+  animation: lede-shift-in 280ms var(--ease);
+}
+@keyframes lede-shift-out {
+  to { opacity: 0; transform: translateY(-14px); }
+}
+@keyframes lede-shift-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__lede-text.is-shifting-out,
+  .hero__lede-text.is-shifting-in { animation: none; }
+}
+.hero__cta { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero__stats {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px; margin-top: 1rem; padding-top: 2rem;
+  border-top: 1px solid var(--color-border); background: var(--color-border);
+}
+@media (min-width: 768px) { .hero__stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.stat { display: flex; flex-direction: column; gap: 6px; padding: 1rem 1.25rem 0; background: var(--color-background); }
+.stat dt { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-muted-fg); }
+.stat dd { margin: 0; font-family: var(--font-display); font-size: 1.375rem; font-weight: 600; color: var(--color-primary); font-feature-settings: "tnum"; }
+.stat__unit { font-size: 0.875rem; font-weight: 400; color: var(--color-muted-fg); margin-left: 4px; }
+
+/* Sections */
+.section { padding-block: var(--section-y); }
+.section--alt { background: var(--color-surface-alt); border-block: 1px solid var(--color-border); }
+.section__head { margin-bottom: 2.5rem; }
+.section__head--centered { text-align: center; max-width: 720px; margin-inline: auto; margin-bottom: 3.5rem; }
+.section__title { font-size: clamp(1.875rem, 4vw, 3rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; }
+.section__title--xl { font-size: clamp(2.25rem, 5vw, 3.75rem); }
+.section__subtitle { color: var(--color-muted-fg); margin-top: 1rem; font-size: 1.0625rem; max-width: 62ch; margin-inline: auto; line-height: 1.6; }
+.section__grid { display: grid; gap: 2.5rem; }
+@media (min-width: 960px) {
+  .section__grid { grid-template-columns: minmax(260px, 360px) 1fr; gap: 4rem; align-items: start; }
+  .section__grid > .section__head { position: sticky; top: calc(var(--nav-h) + 24px); }
+}
+.about-photo {
+  --magnet-x: 0px; --magnet-y: 0px;
+  margin: 1.5rem 0 0;
+  display: flex; flex-direction: column; gap: 10px;
+  max-width: 240px;
+  transform: translate3d(var(--magnet-x), var(--magnet-y), 0);
+  transition: transform var(--dur-mid) var(--ease);
+}
+.about-photo__stack {
+  position: relative; width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-2);
+  overflow: hidden;
+  transition: transform var(--dur-mid) var(--ease), box-shadow var(--dur-mid) var(--ease);
+}
+.about-photo__stack:hover { transform: translateY(-2px); box-shadow: var(--shadow-3); }
+.about-photo__stack img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  opacity: 0;
+  transition: opacity 450ms var(--ease);
+}
+.about-photo__stack img.is-active { opacity: 1; }
+.about-photo__caption { transition: opacity var(--dur-mid) var(--ease); }
+.about-photo__caption.is-fading { opacity: 0; }
+.about-photo figcaption {
+  font-family: var(--font-display);
+  font-size: 0.8125rem; font-style: italic;
+  letter-spacing: 0.02em; color: var(--color-muted-fg);
+}
+.prose p + p { margin-top: 1rem; }
+.prose p { font-size: 1.1875rem; line-height: 1.65; color: var(--color-secondary); }
+.prose strong { color: var(--color-primary); font-weight: 600; }
+.pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1.75rem; }
+.pill { padding: 6px 14px; border-radius: var(--radius-pill); border: 1px solid var(--color-border); background: var(--color-surface); font-size: 0.8125rem; font-weight: 500; color: var(--color-secondary); }
+
+/* Timeline */
+.timeline { position: relative; display: flex; flex-direction: column; gap: 1.5rem; max-width: 960px; margin-inline: auto; }
+.timeline__item { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+@media (min-width: 860px) { .timeline__item { grid-template-columns: 220px 1fr; gap: 2rem; align-items: start; } }
+.timeline__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+@media (min-width: 860px) { .timeline__meta { padding-top: 1.5rem; flex-direction: column; align-items: flex-start; gap: 8px; } }
+.timeline__dates { font-family: var(--font-display); font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.04em; color: var(--color-muted-fg); font-feature-settings: "tnum"; }
+.tag {
+  font-family: var(--font-display); font-size: 0.875rem; font-weight: 500;
+  font-style: italic; letter-spacing: 0;
+  padding: 3px 12px; border-radius: var(--radius-pill); border: 1px solid transparent;
+}
+.tag--incoming { background: var(--color-accent-soft); color: var(--color-accent); border-color: color-mix(in srgb, var(--color-accent) 25%, transparent); }
+.tag--current { background: color-mix(in srgb, var(--color-success) 12%, transparent); color: var(--color-success); border-color: color-mix(in srgb, var(--color-success) 28%, transparent); }
+.role-card {
+  --magnet-x: 0px; --magnet-y: 0px;
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: 1.5rem 1.5rem 1.25rem;
+  box-shadow: var(--shadow-1);
+  transform: translate3d(var(--magnet-x), var(--magnet-y), 0);
+  transition: box-shadow var(--dur-mid) var(--ease), border-color var(--dur-mid) var(--ease);
+}
+.role-card:hover {
+  box-shadow: var(--shadow-3);
+  border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-border));
+}
+@media (min-width: 720px) { .role-card { padding: 1.75rem 2rem; } }
+.role-card__head { display: flex; align-items: center; gap: 14px; margin-bottom: 0; }
+.role-card__logo {
+  width: 48px; height: 48px; flex-shrink: 0;
+  border-radius: 10px; object-fit: contain;
+  background: #FFFFFF; border: 1px solid var(--color-border); padding: 4px;
+}
+.role-card__logo--mark {
+  display: grid; place-items: center;
+  background: #09090B; color: #FFFFFF;
+  font-size: 1rem; font-weight: 600; letter-spacing: 0;
+  padding: 0; border-color: transparent;
+}
+.role-card__logo--dark {
+  background: #09090B; border-color: transparent; padding: 2px;
+}
+.role-card__text { min-width: 0; }
+.role-card__company { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.015em; }
+.role-card__title { margin-top: 4px; color: var(--color-muted-fg); font-size: 0.9375rem; font-weight: 500; }
+.role-card__body { color: var(--color-secondary); font-size: 0.9375rem; line-height: 1.6; }
+.role-card__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 1rem; }
+.role-card__tags li {
+  font-family: var(--font-display); font-size: 0.75rem; letter-spacing: 0.04em;
+  padding: 4px 10px; border-radius: var(--radius-pill);
+  background: var(--color-muted); color: var(--color-secondary);
+}
+
+/* Selected Work */
+.work-grid { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+@media (min-width: 800px) { .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.work-card {
+  --magnet-x: 0px; --magnet-y: 0px;
+  display: flex; flex-direction: column; gap: 1rem;
+  padding: 2rem 2rem 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  color: inherit; text-align: left;
+  box-shadow: var(--shadow-1);
+  transform: translate3d(var(--magnet-x), var(--magnet-y), 0);
+  transition: border-color var(--dur-mid) var(--ease), box-shadow var(--dur-mid) var(--ease);
+}
+.work-card:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-border));
+  box-shadow: var(--shadow-3);
+}
+.work-card__head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+}
+.work-card__ticker {
+  font-family: var(--font-display);
+  font-size: 0.75rem; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--color-muted-fg);
+  font-feature-settings: "tnum";
+}
+.work-card__title {
+  font-size: 1.75rem; font-weight: 600;
+  letter-spacing: -0.02em; line-height: 1.15;
+  margin: 0;
+}
+.work-card__positioning {
+  color: var(--color-muted-fg);
+  font-size: 1rem; line-height: 1.55;
+  margin: 0;
+}
+.work-card__meta {
+  display: grid; gap: 8px;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+  margin: 0;
+}
+.work-card__meta > div {
+  display: grid; grid-template-columns: 68px 1fr; gap: 12px; align-items: baseline;
+}
+.work-card__meta dt {
+  font-family: var(--font-display);
+  font-size: 0.7rem; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--color-muted-fg);
+  margin: 0;
+}
+.work-card__meta dd {
+  font-size: 0.875rem; font-weight: 500;
+  color: var(--color-primary);
+  margin: 0;
+}
+.work-card__cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 4px;
+  font-family: var(--font-display);
+  font-size: 0.875rem; font-weight: 500;
+  color: var(--color-muted-fg);
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--dur-mid) var(--ease), transform var(--dur-mid) var(--ease), color var(--dur-fast) var(--ease);
+}
+.work-card:hover .work-card__cta,
+.work-card:focus-visible .work-card__cta {
+  opacity: 1;
+  transform: translateY(0);
+  color: var(--color-accent);
+}
+.work-card__cta svg { width: 20px; height: 20px; }
+
+/* Skills */
+.skills-grid { display: grid; gap: 1.25rem; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .skills-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.skill-card {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: 1.75rem;
+  display: flex; flex-direction: column; gap: 1rem; box-shadow: var(--shadow-1);
+  transition: transform var(--dur-mid) var(--ease), box-shadow var(--dur-mid) var(--ease), border-color var(--dur-mid) var(--ease);
+}
+.skill-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-3); border-color: var(--color-border-strong); }
+.skill-card__icon { width: 44px; height: 44px; border-radius: var(--radius-md); display: grid; place-items: center; background: var(--color-muted); color: var(--color-primary); }
+.skill-card__icon svg { width: 22px; height: 22px; }
+.skill-card__title { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.015em; }
+.skill-card__list { display: flex; flex-direction: column; gap: 8px; color: var(--color-secondary); font-size: 0.9375rem; }
+.skill-card__list li { padding-left: 18px; position: relative; }
+.skill-card__list li::before { content: ""; position: absolute; left: 0; top: 0.65em; width: 6px; height: 6px; border-radius: 999px; background: var(--color-accent); }
+
+/* Contact */
+.section--contact { text-align: center; }
+.section--contact__inner { max-width: 820px; margin-inline: auto; }
+.contact-grid { margin-top: 2.5rem; display: grid; gap: 1rem; grid-template-columns: 1fr; }
+@media (min-width: 640px) { .contact-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.contact-card {
+  --magnet-x: 0px; --magnet-y: 0px;
+  position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+  padding: 1.5rem 1.75rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border);
+  background: var(--color-surface); text-align: left; box-shadow: var(--shadow-1);
+  transform: translate3d(var(--magnet-x), var(--magnet-y), 0);
+  transition: box-shadow var(--dur-mid) var(--ease), border-color var(--dur-mid) var(--ease);
+}
+.contact-card:hover { box-shadow: var(--shadow-3); border-color: var(--color-primary); }
+.contact-card__label {
+  display: inline-grid; place-items: center;
+  width: 40px; height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--color-muted);
+  color: var(--color-primary);
+  margin-bottom: 4px;
+  transition: background-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+.contact-card__label svg { width: 20px; height: 20px; }
+.contact-card:hover .contact-card__label { background: var(--color-accent-soft); color: var(--color-accent); }
+.contact-card__value { font-family: var(--font-display); font-size: 1.125rem; font-weight: 500; color: var(--color-primary); letter-spacing: -0.01em; word-break: break-all; }
+.contact-card__arrow { position: absolute; top: 1.5rem; right: 1.5rem; width: 18px; height: 18px; color: var(--color-muted-fg); transition: transform var(--dur-mid) var(--ease), color var(--dur-fast) var(--ease); }
+.contact-card:hover .contact-card__arrow { color: var(--color-accent); transform: translate(3px, -3px); }
+
+/* Footer */
+.footer { border-top: 1px solid var(--color-border); padding-block: 1.75rem; color: var(--color-muted-fg); font-size: 0.875rem; }
+.footer__inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.footer__back { display: inline-flex; align-items: center; gap: 6px; font-weight: 500; color: var(--color-primary); }
+.footer__back svg { width: 14px; height: 14px; }
+.footer__back:hover { color: var(--color-accent); }
+
+/* Reveal on scroll */
+.reveal {
+  opacity: 0;
+  translate: 0 16px;
+  transition: opacity .7s var(--ease), translate .7s var(--ease);
+  will-change: translate, opacity;
+}
+.reveal.is-in { opacity: 1; translate: 0 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,*::before,*::after {
+    animation-duration: .001ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important; scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; translate: 0 0; }
+  .dot { animation: none; }
+}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="nav" role="banner">
+    <div class="nav__inner container">
+      <a href="#top" class="nav__brand" aria-label="Louis home">
+        <span class="nav__brand-name">Louis</span>
+      </a>
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#work">Work</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="top" class="hero">
+      <div class="hero__aurora" aria-hidden="true">
+        <span class="hero__aurora-blob hero__aurora-blob--1"></span>
+        <span class="hero__aurora-blob hero__aurora-blob--2"></span>
+        <span class="hero__aurora-blob hero__aurora-blob--3"></span>
+      </div>
+      <div class="container hero__inner">
+        <div class="hero__headline">
+          <h1 class="hero__name">
+            <span class="hero__name-line">Louis</span>
+            <span class="hero__name-line">Nguyen</span>
+          </h1>
+          <figure class="hero__portrait" data-magnetic data-magnetic-strength="0.25" data-magnetic-max="20">
+            <img src="profile.jpg" alt="Portrait of Louis Nguyen" />
+          </figure>
+        </div>
+        <div class="hero__foot">
+          <button type="button" class="hero__email" data-copy="nvhung010606@gmail.com" aria-label="Copy email address">
+            <span class="hero__email-text">nvhung010606@gmail.com</span>
+          </button>
+          <p class="hero__lede"><span class="hero__lede-text">I am an undergraduate from <strong>Vietnam🇻🇳</strong> studying at the <strong>University of South Florida</strong>, with a focus on <strong>valuation</strong>, <strong>credit</strong>, and <strong>equity research</strong>.</span></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <div class="container section__grid">
+        <header class="section__head">
+          <p class="eyebrow">About me</p>
+          <figure class="about-photo" data-magnetic data-magnetic-strength="0.15" data-magnetic-max="18">
+            <div class="about-photo__stack" data-photo-carousel>
+              <img src="powerlifting.png" alt="Louis with the USF Powerlifting team" data-caption="Collegiate State 2025" class="is-active" />
+              <img src="group-night.jpg" alt="Louis with his Scholar of Finance cohort" data-caption="Scholar of Finance" loading="lazy" />
+              <img src="pnc-brian.png" alt="Louis with Brian from PNC Bank" data-caption="PNC Bank — with Brian" loading="lazy" />
+            </div>
+            <figcaption class="about-photo__caption">Collegiate State 2025</figcaption>
+          </figure>
+        </header>
+        <div class="section__body prose">
+          <p>
+            Undergraduate at the <strong>University of South Florida</strong>, training for a career in <strong>Finance</strong>.
+          </p>
+          <p>
+            My work centers on <strong>valuation</strong>, <strong>financial modeling</strong>, and <strong>equity research</strong>. I also use <strong>Python</strong> and <strong>SQL</strong> to sharpen the analysis, not as a separate identity.
+          </p>
+          <p>
+            Outside of Finance, I am <strong>Florida's #8-ranked collegiate powerlifter</strong>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience" class="section section--alt">
+      <div class="container">
+        <header class="section__head section__head--centered">
+          <p class="eyebrow">My Experience</p>
+        </header>
+
+        <ol class="timeline" role="list">
+          <li class="timeline__item">
+            <div class="timeline__meta">
+              <span class="timeline__dates">Sep 2026 — Dec 2026</span>
+              <span class="tag tag--incoming">Incoming</span>
+            </div>
+            <article class="role-card" data-magnetic data-magnetic-strength="0.4" data-magnetic-max="40">
+              <header class="role-card__head">
+                <img class="role-card__logo" src="https://www.google.com/s2/favicons?domain=nmrk.com&sz=128" alt="Newmark logo" width="48" height="48" loading="lazy" />
+                <div class="role-card__text">
+                  <h3 class="role-card__company">Newmark</h3>
+                  <p class="role-card__title">Valuation and Advisory Intern</p>
+                </div>
+              </header>
+            </article>
+          </li>
+
+          <li class="timeline__item">
+            <div class="timeline__meta">
+              <span class="timeline__dates">May 2026 — Aug 2026</span>
+              <span class="tag tag--incoming">Incoming</span>
+            </div>
+            <article class="role-card" data-magnetic data-magnetic-strength="0.4" data-magnetic-max="40">
+              <header class="role-card__head">
+                <img class="role-card__logo" src="https://www.google.com/s2/favicons?domain=southstatebank.com&sz=128" alt="SouthState Bank logo" width="48" height="48" loading="lazy" />
+                <div class="role-card__text">
+                  <h3 class="role-card__company">SouthState Bank</h3>
+                  <p class="role-card__title">Summer Analyst — Commercial Banking &amp; Credit</p>
+                </div>
+              </header>
+            </article>
+          </li>
+
+          <li class="timeline__item">
+            <div class="timeline__meta">
+              <span class="timeline__dates">Mar 2026 — Present</span>            </div>
+            <article class="role-card" data-magnetic data-magnetic-strength="0.4" data-magnetic-max="40">
+              <header class="role-card__head">
+                <img class="role-card__logo" src="https://www.google.com/s2/favicons?domain=gousfbulls.com&sz=128" alt="University of South Florida logo" width="48" height="48" loading="lazy" />
+                <div class="role-card__text">
+                  <h3 class="role-card__company">University of South Florida</h3>
+                  <p class="role-card__title">Research Assistant — AI/ML in Health</p>
+                </div>
+              </header>
+            </article>
+          </li>
+
+          <li class="timeline__item">
+            <div class="timeline__meta">
+              <span class="timeline__dates">Sep 2024 — Present</span>            </div>
+            <article class="role-card" data-magnetic data-magnetic-strength="0.4" data-magnetic-max="40">
+              <header class="role-card__head">
+                <img class="role-card__logo" src="https://www.google.com/s2/favicons?domain=gousfbulls.com&sz=128" alt="USF Athletics logo" width="48" height="48" loading="lazy" />
+                <div class="role-card__text">
+                  <h3 class="role-card__company">University of South Florida</h3>
+                  <p class="role-card__title">Student Athlete — Varsity Powerlifting</p>
+                </div>
+              </header>
+            </article>
+          </li>
+
+          <li class="timeline__item">
+            <div class="timeline__meta">
+              <span class="timeline__dates">Dec 2025 — Feb 2026</span>
+            </div>
+            <article class="role-card" data-magnetic data-magnetic-strength="0.4" data-magnetic-max="40">
+              <header class="role-card__head">
+                <img class="role-card__logo" src="data:image/jpeg;base64,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cwTRdRdk/FFrDPzP3C+y2VLpWc8KhEfxLHC/yoW2wFsB4CKWRKVt5oHm17JjdKFmOyDDI8G2xyinp+Ov/8QAJxABAAEEAQMDBQEBAAAAAAAAAREAITFBUWFxgRCRwSBAcNHwobH/2gAIAQEAAT8h/MTkQEqtitfGhvZS6/g3tE+2UXmxz4Y2/sqcXsvfmO7L6H6OP9AYHRoS6CWiyjQ35Gw+0meWn2Hh9w+TikIFLAbpWIvCDsCHZSsjbHlF82RnrT9iy0GaKvufJfwZPHoagJWA/uKNx1KY9UzHiinN8gTT0+loi0SJeHKhh6VuzqnBPB6RGpoWYmk6z76ELktj6ujfqN7LW4Xb+ZvXRijWxpJb8defVCdutTtlmJGzN59HNSh4AT0PTSmSPlHy1ZhjBwCcHkq/7abTOBBlX9zV0oiw9hVYdafkSiLAymgq5CtB0BYIOaSrMGUWCOpd8U3qCF0f6inaa/oc+gS8ywvF3mpe2yUtNuSgy7KiYYm+b1y1TMDOcQ128ClQhvYq9ajcXJX0mHCPzxd+bo8+E43NSKIGY6BurIjU7y0ey8vuDwc0hIhcTVRDNCOerI7t6Hb5OEsRK6e9fRvGhLJjmPPHftSAX5Y6Br/aQRMpywskYYz/AMoXkjTHMxAd6MBzZkrAvtWaYjLDihjC3DM1mAzqiuEAwU3hJ3609FqsWIxolPb0YCIsQ5OfQSzurIeiQf0VfgCBapqWw4JpdCCwCMnNBNAiaDO0+SsC4bJTlCR5rTkiQEWp/ZhRebPPlrZ+ioxewd+I7MPph8Bpg+YHotFdC25Lwk+23ciQhEs1v40t7qHyKDgdArNyAzeGp82RchlgWLq+fzr/AP/aAAwDAQACAAMAAAAQ88888888888888888888888888888888888888888888888888884w88888888888MwY8w88w8888w8YossoQ4sMowAIwg888888888888888888888888888888888888888888888888888888888888888888888888888//EABQRAQAAAAAAAAAAAAAAAAAAAHD/2gAIAQMBAT8QKf/EABQRAQAAAAAAAAAAAAAAAAAAAHD/2gAIAQIBAT8QKf/EACYQAQEAAgICAQMEAwAAAAAAAAERACExQVFhECBAgXBxkcGhsfD/2gAIAQEAAT8Q/WJ1jhwByq8GIipoSfFVh+SQhCiqR2Jp6+2PlCeEK73sDNghFBF1heF0Bdj+8+FQ/qyAT+CFHxhtUtLSqcbfAl0H2pieDqZg/YvzA6Y/kQKqeAML6184UFpfKHYZLcClANigQAogRRM5PnClC+TUThFHnCkyc2Ws+aHv4aSB0PgPKqgCqoArjchtU+JnTu7esRhpOmxiAIIigT6ZIzhhsivgBa1nUY/5W9zYRd8mufgwpT0UAB5OwzUZ323U7aFNqHf1doQZB8tpSzTw2av+3ibtvzct+2x83v4/cxFrLEOyVXCNGldsSUlWppXYjbd3n4QsSL4I/AB8A62ADAOAyx0gOnOhbLSEEQdk5yqQhrahQkeC+TCGjfDROAuoKh1tOx/7SsqCCLARmKG07FjLDeeXXIyt433tn9SOQAP42oz2L8DH/G8vgC5DxqCSaceMqrqQYoq8nI84Sr7VK7V3VIPgxHGUnoRweJLTnKH6DI13ZBgAIaxiqjy7uPWJ3NDbCOgqIdrCWC9ESg39IFFaSFCYlNJkDwdDMH7k+YnTH8iJxRwj05BLakAgX2dCuVXeWAC0jgQVMVy+jdzadfzDWg7fZJUCRc4Le+q26qPxk/j9VASqhQIku1yfYHAjQWtGvzkmLOjO4B0K71jU2gknPAvZja1w3SDK1RtQNOL24eGCNF1DrEFpRZWFcJdUPwLKP68RE0RGnk+NVxZjmcqwk3t0KSy8D5OW9gNRjeT6ntVaJpEaeTChiVubJg9F7POG5nCdhwrgKdnRMZdwnR9sEoLyh5GH5QnlCOtaAXKA0UFdYXhdITZ/rPg+vJC0V7Ng7ERRCtMWAvTq9bOEGn227rHDkHkR5MRNTSk+arPSDZNwgD0Gf5k0dxo/xlpE7WsiUQhtTy/rr//Z" alt="GenAI Fund logo" width="48" height="48" loading="lazy" />
+                <div class="role-card__text">
+                  <h3 class="role-card__company">GenAI Fund</h3>
+                  <p class="role-card__title">Associate, Venture Capital</p>
+                </div>
+              </header>
+            </article>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="work" class="section">
+      <div class="container">
+        <header class="section__head section__head--centered">
+          <p class="eyebrow">Selected Work</p>
+        </header>
+
+        <div class="work-grid">
+
+          <a class="work-card" href="https://github.com/nvhung010606/elilillywebsite" target="_blank" rel="noopener noreferrer" data-type="valuation" data-magnetic data-magnetic-strength="0.25" data-magnetic-max="22">
+            <div class="work-card__head">
+              <span class="work-card__ticker">NYSE: LLY</span>
+            </div>
+            <h3 class="work-card__title">Eli Lilly</h3>
+            <p class="work-card__positioning">Buy recommendation at $1,508 driven by GLP-1 pipeline thesis, delivered in 80 hours.</p>
+            <dl class="work-card__meta">
+              <div><dt>Date</dt><dd>Feb 2026</dd></div>
+              <div><dt>Tools</dt><dd>DCF · Comps · PowerPoint</dd></div>
+            </dl>
+            <span class="work-card__cta" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            </span>
+          </a>
+
+          <a class="work-card" href="https://github.com/nvhung010606/snowflakewebsite" target="_blank" rel="noopener noreferrer" data-type="equity-research" data-magnetic data-magnetic-strength="0.25" data-magnetic-max="22">
+            <div class="work-card__head">
+              <span class="work-card__ticker">NYSE: SNOW</span>
+            </div>
+            <h3 class="work-card__title">Snowflake</h3>
+            <p class="work-card__positioning">12-page equity research report deriving a $252 price target from a 10-year DCF built on 10-K data.</p>
+            <dl class="work-card__meta">
+              <div><dt>Date</dt><dd>Oct 2025</dd></div>
+              <div><dt>Tools</dt><dd>DCF · WACC · Python · Matplotlib</dd></div>
+            </dl>
+            <span class="work-card__cta" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            </span>
+          </a>
+
+          <a class="work-card" href="https://github.com/nvhung010606/macro-event-tracker" target="_blank" rel="noopener noreferrer" data-type="macro quantitative" data-magnetic data-magnetic-strength="0.25" data-magnetic-max="22">
+            <div class="work-card__head">
+              <span class="work-card__ticker">FOMC</span>
+            </div>
+            <h3 class="work-card__title">Fed Policy Tracker</h3>
+            <p class="work-card__positioning">Probability-weighted forecasting model predicting FOMC rate decisions 2–5 bps closer to outcomes than CME FedWatch.</p>
+            <dl class="work-card__meta">
+              <div><dt>Date</dt><dd>Nov 2025 — Feb 2026</dd></div>
+              <div><dt>Tools</dt><dd>Python · Statistical Modeling · Data Pipeline</dd></div>
+            </dl>
+            <span class="work-card__cta" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            </span>
+          </a>
+
+          <a class="work-card" href="https://github.com/nvhung010606/Python_Data_Analytics" target="_blank" rel="noopener noreferrer" data-type="quantitative" data-magnetic data-magnetic-strength="0.25" data-magnetic-max="22">
+            <div class="work-card__head">
+              <span class="work-card__ticker">Quant Portfolio</span>
+            </div>
+            <h3 class="work-card__title">Python Data Analytics</h3>
+            <p class="work-card__positioning">A working collection of quantitative and data analysis projects in Python.</p>
+            <dl class="work-card__meta">
+              <div><dt>Date</dt><dd>May 2025 — Aug 2025</dd></div>
+              <div><dt>Tools</dt><dd>Python · Pandas · NumPy · SQL</dd></div>
+            </dl>
+            <span class="work-card__cta" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            </span>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section section--alt section--contact">
+      <div class="container section--contact__inner">
+        <p class="eyebrow">Contact</p>
+        <h2 class="section__title section__title--xl">Let's talk.</h2>
+        <div class="contact-grid">
+          <a class="contact-card" href="mailto:nvhung010606@gmail.com" aria-label="Email Louis at nvhung010606@gmail.com" data-magnetic data-magnetic-strength="0.1">
+            <span class="contact-card__label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </span>
+            <div class="contact-card__value">nvhung010606@gmail.com</div>
+            <svg class="contact-card__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          </a>
+          <a class="contact-card" href="https://www.linkedin.com/in/viethungnguyenusf/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile — viethungnguyenusf" data-magnetic data-magnetic-strength="0.1">
+            <span class="contact-card__label">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.13 1.45-2.13 2.94v5.66H9.35V9.04h3.41v1.56h.04c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.26 2.37 4.26 5.44v6.26zM5.34 7.48c-1.14 0-2.06-.93-2.06-2.06s.92-2.06 2.06-2.06 2.06.93 2.06 2.06-.92 2.06-2.06 2.06zm1.78 12.97H3.56V9.04h3.56v11.41zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+            </span>
+            <div class="contact-card__value">/in/viethungnguyenusf</div>
+            <svg class="contact-card__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>© <span id="year"></span> Louis (Hung) Nguyen.</p>
+      <a href="#top" class="footer__back">
+        Back to top
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+(() => {
+  const nav = document.querySelector(".nav");
+  const onScroll = () => { if (nav) nav.classList.toggle("is-scrolled", window.scrollY > 8); };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  // Scrollspy: sync active nav link with the section in view
+  const navLinkMap = new Map();
+  document.querySelectorAll('.nav__links a[href^="#"]').forEach((a) => {
+    navLinkMap.set(a.getAttribute("href").slice(1), a);
+  });
+  const trackedSections = Array.from(document.querySelectorAll("section[id]"))
+    .filter((s) => navLinkMap.has(s.id));
+
+  if ("IntersectionObserver" in window && trackedSections.length) {
+    const setActive = (id) => {
+      navLinkMap.forEach((link, key) => {
+        link.classList.toggle("is-active", key === id);
+      });
+    };
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setActive(visible.target.id);
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
+    trackedSections.forEach((section) => sectionObserver.observe(section));
+  }
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const revealTargets = document.querySelectorAll(
+    ".hero__inner, .section__head, .section__body, .role-card, .work-card, .skill-card, .contact-card"
+  );
+  revealTargets.forEach((el) => el.classList.add("reveal"));
+
+  if (!reducedMotion && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-in");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: "0px 0px -10% 0px", threshold: 0.08 });
+    revealTargets.forEach((el) => observer.observe(el));
+  } else {
+    revealTargets.forEach((el) => el.classList.add("is-in"));
+  }
+
+  const year = document.getElementById("year");
+  if (year) year.textContent = new Date().getFullYear();
+
+  // Hero aurora — idle drift + cursor repulsion
+  const heroEl = document.querySelector(".hero");
+  const auroraBlobs = document.querySelectorAll(".hero__aurora-blob");
+  const auroraFineHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  if (heroEl && auroraBlobs.length && !reducedMotion) {
+    const TAU = Math.PI * 2;
+    // Cache each blob's rest center relative to the hero (invariant under scroll and transforms)
+    const measure = (el) => {
+      const r = el.getBoundingClientRect();
+      const hr = heroEl.getBoundingClientRect();
+      return { cx0: r.left + r.width / 2 - hr.left, cy0: r.top + r.height / 2 - hr.top };
+    };
+    const states = Array.from(auroraBlobs).map((el, i) => ({
+      el,
+      ...measure(el),
+      strength: [260, 220, 190][i] ?? 220,
+      range: 620,
+      fx: TAU / ([24, 30, 36][i] ?? 30),
+      fy: TAU / ([20, 24, 28][i] ?? 24),
+      ax: [55, 70, 50][i] ?? 55,
+      ay: [45, 55, 40][i] ?? 45,
+      phase: i * 2.1,
+      tx: 0, ty: 0, rx: 0, ry: 0
+    }));
+    const remeasure = () => {
+      states.forEach((s) => Object.assign(s, measure(s.el)));
+    };
+    window.addEventListener("resize", remeasure, { passive: true });
+    if (auroraFineHover) {
+      heroEl.addEventListener("mousemove", (e) => {
+        const hr = heroEl.getBoundingClientRect();
+        const mx = e.clientX - hr.left;
+        const my = e.clientY - hr.top;
+        states.forEach((s) => {
+          const dx = s.cx0 - mx;
+          const dy = s.cy0 - my;
+          const dist = Math.hypot(dx, dy) || 1;
+          const falloff = Math.max(0, 1 - dist / s.range);
+          const push = s.strength * falloff * falloff;
+          s.tx = (dx / dist) * push;
+          s.ty = (dy / dist) * push;
+        });
+      });
+      heroEl.addEventListener("mouseleave", () => {
+        states.forEach((s) => { s.tx = 0; s.ty = 0; });
+      });
+    }
+    const t0 = performance.now();
+    (function tickAurora() {
+      const t = (performance.now() - t0) / 1000;
+      for (const s of states) {
+        s.rx += (s.tx - s.rx) * 0.08;
+        s.ry += (s.ty - s.ry) * 0.08;
+        const dx = Math.sin(t * s.fx + s.phase) * s.ax;
+        const dy = Math.cos(t * s.fy + s.phase) * s.ay;
+        s.el.style.transform = `translate3d(${dx + s.rx}px, ${dy + s.ry}px, 0)`;
+      }
+      requestAnimationFrame(tickAurora);
+    })();
+  }
+
+  // About-photo carousel — cycle through images in the same spot
+  document.querySelectorAll("[data-photo-carousel]").forEach((stack) => {
+    const imgs = Array.from(stack.querySelectorAll("img"));
+    if (imgs.length < 2) return;
+    const caption = stack.parentElement?.querySelector(".about-photo__caption");
+    let idx = imgs.findIndex((i) => i.classList.contains("is-active"));
+    if (idx < 0) { imgs[0].classList.add("is-active"); idx = 0; }
+    setInterval(() => {
+      const next = (idx + 1) % imgs.length;
+      imgs[idx].classList.remove("is-active");
+      imgs[next].classList.add("is-active");
+      if (caption) {
+        const newCap = imgs[next].dataset.caption || "";
+        caption.classList.add("is-fading");
+        setTimeout(() => {
+          caption.textContent = newCap;
+          caption.classList.remove("is-fading");
+        }, 240);
+      }
+      idx = next;
+    }, 2200);
+  });
+
+  // Email copy-to-clipboard — cursor-following pill
+  const emailPill = document.createElement("span");
+  emailPill.className = "email-cursor-pill";
+  emailPill.textContent = "Copy";
+  document.body.appendChild(emailPill);
+
+  document.querySelectorAll("[data-copy]").forEach((btn) => {
+    btn.addEventListener("mouseenter", () => emailPill.classList.add("is-visible"));
+    btn.addEventListener("mouseleave", () => {
+      emailPill.classList.remove("is-visible");
+      emailPill.textContent = "Copy";
+    });
+    btn.addEventListener("mousemove", (e) => {
+      emailPill.style.left = e.clientX + "px";
+      emailPill.style.top  = e.clientY + "px";
+    });
+    btn.addEventListener("click", async () => {
+      const text = btn.dataset.copy || "";
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand("copy"); } catch {}
+        document.body.removeChild(ta);
+      }
+      emailPill.textContent = "Copied!";
+      clearTimeout(btn._copiedTimer);
+      btn._copiedTimer = setTimeout(() => { emailPill.textContent = "Copy"; }, 1800);
+    });
+  });
+
+  // Hero lede — text-shifting carousel (fade + vertical slide)
+  const lede = document.querySelector(".hero__lede-text");
+  if (lede && !reducedMotion) {
+    const messages = [
+      `I am from <strong>Vietnam🇻🇳</strong>`,
+      `I am an undergraduate at the <strong>University of South Florida🤘</strong>`,
+      `I am interested in <strong>valuation</strong>, <strong>credit</strong>, and <strong>equity research🏦</strong>`
+    ];
+    let idx = 0;
+    lede.innerHTML = messages[0];
+    setInterval(() => {
+      idx = (idx + 1) % messages.length;
+      lede.classList.remove("is-shifting-in");
+      lede.classList.add("is-shifting-out");
+      setTimeout(() => {
+        lede.innerHTML = messages[idx];
+        lede.classList.remove("is-shifting-out");
+        lede.classList.add("is-shifting-in");
+        setTimeout(() => lede.classList.remove("is-shifting-in"), 290);
+      }, 220);
+    }, 2000);
+  }
+
+  // Magnetic hover (desktop only, respects reduced-motion)
+  const fineHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (fineHover && !reduceMotion) {
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const magnetics = [];
+    document.querySelectorAll("[data-magnetic]").forEach((el) => {
+      const strength = parseFloat(el.dataset.magneticStrength) || 0.35;
+      const max = parseFloat(el.dataset.magneticMax) || Infinity;
+      const state = { el, x: 0, y: 0, tx: 0, ty: 0, strength, max };
+      magnetics.push(state);
+
+      el.addEventListener("mousemove", (e) => {
+        const rect = el.getBoundingClientRect();
+        const dx = (e.clientX - rect.left - rect.width / 2) * strength;
+        const dy = (e.clientY - rect.top - rect.height / 2) * strength;
+        state.tx = clamp(dx, -max, max);
+        state.ty = clamp(dy, -max, max);
+      });
+      el.addEventListener("mouseleave", () => {
+        state.tx = 0;
+        state.ty = 0;
+      });
+    });
+
+    if (magnetics.length) {
+      (function tickMagnetic() {
+        for (let i = 0; i < magnetics.length; i++) {
+          const s = magnetics[i];
+          s.x = lerp(s.x, s.tx, 0.2);
+          s.y = lerp(s.y, s.ty, 0.2);
+          s.el.style.setProperty("--magnet-x", `${s.x}px`);
+          s.el.style.setProperty("--magnet-y", `${s.y}px`);
+        }
+        requestAnimationFrame(tickMagnetic);
+      })();
+    }
+  }
+})();
+  </script>
+</body>
+</html>
