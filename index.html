@@ -303,27 +303,41 @@ button { font: inherit; cursor: pointer; color: inherit; }
 }
 .hero__lede strong { color: var(--color-primary); font-weight: 600; }
 .hero__lede-static { display: inline; }
-/* RotatingText — highlighted pill container */
+/* RotatingText — ReactBits character-level pill */
 .hero-rotate {
-  display: inline-block;
-  box-sizing: border-box;       /* width = full box, matches getBoundingClientRect */
-  vertical-align: baseline;
-  overflow: hidden;             /* clip content during width animation, no mid-animation wrap */
+  display: inline-flex;
+  flex-wrap: wrap;
+  position: relative;
   margin-left: 0.3em;
   padding: 0.12em 0.5em 0.14em;
   background: rgba(37, 99, 235, 0.08);
   border: 1px solid rgba(37, 99, 235, 0.18);
   border-radius: 8px;
-}
-.hero-rotate-word {
-  display: inline-block;
+  vertical-align: baseline;
+  box-sizing: border-box;
   overflow: hidden;
-  vertical-align: bottom;
-  line-height: 1.3;
 }
-.hero-rotate-inner {
+.text-rotate-word {
+  display: inline-flex;
+  overflow: hidden;
+  padding-bottom: 0.1em;
+}
+.text-rotate-element {
   display: inline-block;
   will-change: transform, opacity;
+}
+.text-rotate-space {
+  display: inline-block;
+  width: 0.3em;
+}
+.text-rotate-sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border-width: 0;
 }
 .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; }
 .hero__stats {
@@ -1211,7 +1225,9 @@ button { font: inherit; cursor: pointer; color: inherit; }
     });
   });
 
-  // RotatingText — word-by-word slide animation ("I am" is static)
+  // RotatingText — ReactBits character-level animation
+  // splitBy="characters", staggerFrom="last", staggerDuration=0.025s
+  // spring(damping:30, stiffness:400) ≈ cubic-bezier(0.34,1.56,0.64,1), rotationInterval=2000ms
   (function () {
     const container = document.querySelector(".hero-rotate");
     if (!container) return;
@@ -1223,111 +1239,164 @@ button { font: inherit; cursor: pointer; color: inherit; }
     ];
 
     let currentIdx = 0;
-    let busy = false;
-    const EASE_IN  = "cubic-bezier(0.22, 1, 0.36, 1)";
-    const EASE_OUT = "cubic-bezier(0.55, 0, 0.45, 1)";
+    let busy = true; // stay busy during initial animation
+    const SPRING   = "cubic-bezier(0.34, 1.56, 0.64, 1)";
+    const STAGGER  = 25;   // ms (staggerDuration=0.025s)
+    const DURATION = 300;  // ms per character
+    const INTERVAL = 2000; // ms between rotations
 
-    // Parse phrase HTML into [{html, isSpace}] word chunks
-    function parseWords(html) {
+    // Grapheme segmenter — correct handling of emoji & multi-codepoint chars
+    const seg = typeof Intl !== "undefined" && Intl.Segmenter
+      ? new Intl.Segmenter()
+      : null;
+    function segmentText(str) {
+      return seg ? [...seg.segment(str)].map(s => s.segment) : [...str];
+    }
+
+    // Parse HTML into word groups: [{chars:[{char, bold}]}]
+    // Spaces start a new word; punctuation stays attached to its preceding word
+    function parseWordGroups(html) {
       const tmp = document.createElement("div");
       tmp.innerHTML = html;
-      const chunks = [];
-      tmp.childNodes.forEach(node => {
-        if (node.nodeType === Node.TEXT_NODE) {
-          node.textContent.split(/(\s+)/).forEach(part => {
-            if (!part) return;
-            chunks.push({ html: /^\s+$/.test(part) ? " " : part.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"), isSpace: /^\s+$/.test(part) });
-          });
-        } else {
-          chunks.push({ html: node.outerHTML, isSpace: false });
+      const groups = [];
+      let cur = null, gap = false;
+
+      function push(str, bold) {
+        for (const ch of segmentText(str)) {
+          if (ch === " " || ch === "\xa0") {
+            if (cur) gap = true;
+          } else {
+            if (gap || !cur) { cur = { chars: [] }; groups.push(cur); gap = false; }
+            cur.chars.push({ char: ch, bold });
+          }
         }
+      }
+
+      tmp.childNodes.forEach(n => {
+        if (n.nodeType === Node.TEXT_NODE)                   push(n.textContent, false);
+        else if (n.nodeName === "STRONG" || n.nodeName === "B") push(n.textContent, true);
+        else                                                  push(n.textContent, false);
       });
-      return chunks;
+      return groups;
     }
 
-    function buildDOM(chunks) {
+    // Rebuild container DOM: one .text-rotate-element per grapheme cluster
+    function buildCharDOM(groups) {
       container.innerHTML = "";
-      chunks.forEach(c => {
-        if (c.isSpace) {
-          container.appendChild(document.createTextNode(" "));
-        } else {
-          const word = document.createElement("span");
-          word.className = "hero-rotate-word";
-          const inner = document.createElement("span");
-          inner.className = "hero-rotate-inner";
-          inner.innerHTML = c.html;
-          word.appendChild(inner);
-          container.appendChild(word);
+
+      // Screen-reader text (full phrase, visually hidden)
+      const sr = document.createElement("span");
+      sr.className = "text-rotate-sr-only";
+      sr.textContent = groups.map(g => g.chars.map(c => c.char).join("")).join(" ");
+      container.appendChild(sr);
+
+      groups.forEach((group, gi) => {
+        if (gi > 0) {
+          const sp = document.createElement("span");
+          sp.className = "text-rotate-space";
+          container.appendChild(sp);
         }
+        const wEl = document.createElement("span");
+        wEl.className = "text-rotate-word";
+        wEl.setAttribute("aria-hidden", "true");
+
+        group.chars.forEach(({ char, bold }) => {
+          const el = document.createElement("span");
+          el.className = "text-rotate-element";
+          if (bold) {
+            const s = document.createElement("strong");
+            s.textContent = char;
+            el.appendChild(s);
+          } else {
+            el.textContent = char;
+          }
+          wEl.appendChild(el);
+        });
+        container.appendChild(wEl);
       });
     }
 
-    function animateIn(inners) {
-      inners.forEach((el, i) => {
-        el.style.transform = "translateY(110%)";
-        el.style.opacity = "0";
-        el.style.transition = "none";
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          el.style.transition = `transform 420ms ${EASE_IN} ${i * 38}ms, opacity 260ms ${EASE_IN} ${i * 38}ms`;
-          el.style.transform = "translateY(0)";
-          el.style.opacity = "1";
-        }));
-      });
-    }
+    // staggerFrom="last": last element (i=total-1) → delay 0; first → longest delay
+    function staggerDelay(i, total) { return (total - 1 - i) * STAGGER; }
 
-    function animateOut(inners, done) {
-      inners.forEach((el, i) => {
-        el.style.transition = `transform 260ms ${EASE_OUT} ${i * 28}ms, opacity 200ms ${EASE_OUT} ${i * 28}ms`;
-        el.style.transform = "translateY(-110%)";
-        el.style.opacity = "0";
+    function allEls() { return [...container.querySelectorAll(".text-rotate-element")]; }
+
+    function animateOut(els, done) {
+      const n = els.length;
+      const maxD = n > 0 ? staggerDelay(0, n) : 0;
+      els.forEach((el, i) => {
+        const d = staggerDelay(i, n);
+        el.style.transition = `transform ${DURATION}ms ${SPRING} ${d}ms, opacity 200ms ease ${d}ms`;
+        el.style.transform  = "translateY(-120%)";
+        el.style.opacity    = "0";
       });
-      setTimeout(done, inners.length * 28 + 280);
+      setTimeout(done, maxD + DURATION + 20);
     }
 
     function show(idx, oldWidth) {
-      buildDOM(parseWords(phrases[idx]));
-      const inners = [...container.querySelectorAll(".hero-rotate-inner")];
+      const groups = parseWordGroups(phrases[idx]);
+      buildCharDOM(groups);
+      const els = allEls();
+      const n = els.length;
 
-      if (!reducedMotion && oldWidth !== undefined) {
-        // Measure the TRUE single-line width via an off-screen ghost placed
-        // directly on <body> (outside the flex container), so it isn't
-        // constrained to fill available flex space like width:auto would be.
-        const cs = getComputedStyle(container);
-        const ghost = container.cloneNode(true);
-        Object.assign(ghost.style, {
-          position:      "absolute",
-          visibility:    "hidden",
-          pointerEvents: "none",
-          left:          "-9999px",
-          top:           "0",
-          width:         "auto",
-          whiteSpace:    "nowrap",   // force single line
-          transition:    "none",
-          fontSize:      cs.fontSize,
-          fontFamily:    cs.fontFamily,
-          fontWeight:    cs.fontWeight
-        });
-        document.body.appendChild(ghost);
-        const newWidth = ghost.getBoundingClientRect().width;
-        document.body.removeChild(ghost);
+      if (!reducedMotion) {
+        if (oldWidth !== undefined) {
+          // Measure natural single-line width (flex-wrap:nowrap so content stays on one line)
+          // CSS transforms don't affect layout, so characters at translateY(100%) don't skew the measurement
+          container.style.transition = "none";
+          container.style.width      = "auto";
+          container.style.flexWrap   = "nowrap";
+          const newWidth = container.getBoundingClientRect().width;
+          container.style.width = oldWidth + "px"; // re-pin (flexWrap stays nowrap)
 
-        // Container stays pinned at oldWidth — animate to newWidth while
-        // words slide in simultaneously
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          container.style.transition = `width 420ms ${EASE_IN}`;
-          container.style.width = newWidth + "px";
-          animateIn(inners);
-          setTimeout(() => {
-            container.style.transition = "none";
-            container.style.width = "auto";
-            container.style.whiteSpace = ""; // restore natural wrapping
-            busy = false;
-          }, 500);
-        }));
+          // Place characters below their word slots (translateY(100%)), ready to enter
+          els.forEach(el => {
+            el.style.transform  = "translateY(100%)";
+            el.style.opacity    = "0";
+            el.style.transition = "none";
+          });
+
+          const maxD = n > 0 ? staggerDelay(0, n) : 0;
+
+          // Double-RAF: browser commits initial positions, then we start transitions
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            container.style.transition = `width ${DURATION}ms ${SPRING}`;
+            container.style.width      = newWidth + "px";
+            els.forEach((el, i) => {
+              const d = staggerDelay(i, n);
+              el.style.transition = `transform ${DURATION}ms ${SPRING} ${d}ms, opacity 200ms ease ${d}ms`;
+              el.style.transform  = "translateY(0)";
+              el.style.opacity    = "1";
+            });
+            setTimeout(() => {
+              container.style.transition = "none";
+              container.style.width      = "auto";
+              container.style.flexWrap   = "";
+              busy = false;
+            }, maxD + DURATION + 60);
+          }));
+
+        } else {
+          // First show — just animate in, no width transition
+          els.forEach(el => {
+            el.style.transform  = "translateY(100%)";
+            el.style.opacity    = "0";
+            el.style.transition = "none";
+          });
+          const maxD = n > 0 ? staggerDelay(0, n) : 0;
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            els.forEach((el, i) => {
+              const d = staggerDelay(i, n);
+              el.style.transition = `transform ${DURATION}ms ${SPRING} ${d}ms, opacity 200ms ease ${d}ms`;
+              el.style.transform  = "translateY(0)";
+              el.style.opacity    = "1";
+            });
+            setTimeout(() => { busy = false; }, maxD + DURATION + 60);
+          }));
+        }
       } else {
-        container.style.transition = "none";
-        container.style.width = "auto";
-        if (!reducedMotion) animateIn(inners);
+        container.style.width    = "auto";
+        container.style.flexWrap = "";
         busy = false;
       }
     }
@@ -1336,15 +1405,15 @@ button { font: inherit; cursor: pointer; color: inherit; }
       if (busy) return;
       busy = true;
 
-      // Pin current width so the container doesn't collapse during exit
+      // Pin current width to prevent collapse during exit
       const oldWidth = container.getBoundingClientRect().width;
       container.style.transition = "none";
-      container.style.width = oldWidth + "px";
-      container.style.whiteSpace = "nowrap"; // prevent wrap at intermediate widths
+      container.style.width      = oldWidth + "px";
+      container.style.flexWrap   = "nowrap";
 
-      const inners = [...container.querySelectorAll(".hero-rotate-inner")];
-      if (!reducedMotion) {
-        animateOut(inners, () => {
+      const els = allEls();
+      if (!reducedMotion && els.length > 0) {
+        animateOut(els, () => {
           currentIdx = (currentIdx + 1) % phrases.length;
           show(currentIdx, oldWidth);
         });
@@ -1355,7 +1424,7 @@ button { font: inherit; cursor: pointer; color: inherit; }
     }
 
     show(0);
-    setInterval(rotate, 3500);
+    setInterval(rotate, INTERVAL);
   })();
 
   // Magnetic hover (desktop only, respects reduced-motion)
