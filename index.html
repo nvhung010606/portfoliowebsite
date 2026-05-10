@@ -1288,19 +1288,34 @@ button { font: inherit; cursor: pointer; color: inherit; }
       const inners = [...container.querySelectorAll(".hero-rotate-inner")];
 
       if (!reducedMotion && oldWidth !== undefined) {
-        // Measure new natural width while container is still pinned at oldWidth.
-        // Setting width:auto + reading getBCR in the same JS task is invisible to the browser.
-        container.style.transition = "none";
-        container.style.width = "auto";
-        const newWidth = container.getBoundingClientRect().width;
-        container.style.width = oldWidth + "px"; // snap back — no paint happens yet
+        // Measure the TRUE single-line width via an off-screen ghost placed
+        // directly on <body> (outside the flex container), so it isn't
+        // constrained to fill available flex space like width:auto would be.
+        const cs = getComputedStyle(container);
+        const ghost = container.cloneNode(true);
+        Object.assign(ghost.style, {
+          position:      "absolute",
+          visibility:    "hidden",
+          pointerEvents: "none",
+          left:          "-9999px",
+          top:           "0",
+          width:         "auto",
+          whiteSpace:    "nowrap",   // force single line
+          transition:    "none",
+          fontSize:      cs.fontSize,
+          fontFamily:    cs.fontFamily,
+          fontWeight:    cs.fontWeight
+        });
+        document.body.appendChild(ghost);
+        const newWidth = ghost.getBoundingClientRect().width;
+        document.body.removeChild(ghost);
 
-        // Next frame: start width transition and word slide-in simultaneously
+        // Container stays pinned at oldWidth — animate to newWidth while
+        // words slide in simultaneously
         requestAnimationFrame(() => requestAnimationFrame(() => {
           container.style.transition = `width 420ms ${EASE_IN}`;
           container.style.width = newWidth + "px";
           animateIn(inners);
-          // Once the width animation is done, release back to auto
           setTimeout(() => {
             container.style.transition = "none";
             container.style.width = "auto";
@@ -1308,7 +1323,6 @@ button { font: inherit; cursor: pointer; color: inherit; }
           }, 500);
         }));
       } else {
-        // Initial render or reduced-motion: just size naturally
         container.style.transition = "none";
         container.style.width = "auto";
         if (!reducedMotion) animateIn(inners);
