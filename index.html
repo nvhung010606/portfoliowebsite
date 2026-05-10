@@ -305,14 +305,14 @@ button { font: inherit; cursor: pointer; color: inherit; }
 .hero__lede-static { display: inline; }
 /* RotatingText — highlighted pill container */
 .hero-rotate {
-  display: inline;
+  display: inline-block;
+  box-sizing: border-box;       /* width = full box, matches getBoundingClientRect */
+  vertical-align: baseline;
   margin-left: 0.3em;
   padding: 0.12em 0.5em 0.14em;
   background: rgba(37, 99, 235, 0.08);
   border: 1px solid rgba(37, 99, 235, 0.18);
   border-radius: 8px;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
 }
 .hero-rotate-word {
   display: inline-block;
@@ -1283,25 +1283,57 @@ button { font: inherit; cursor: pointer; color: inherit; }
       setTimeout(done, inners.length * 28 + 280);
     }
 
-    function show(idx) {
+    function show(idx, oldWidth) {
       buildDOM(parseWords(phrases[idx]));
-      if (!reducedMotion) animateIn([...container.querySelectorAll(".hero-rotate-inner")]);
+      const inners = [...container.querySelectorAll(".hero-rotate-inner")];
+
+      if (!reducedMotion && oldWidth !== undefined) {
+        // Measure new natural width while container is still pinned at oldWidth.
+        // Setting width:auto + reading getBCR in the same JS task is invisible to the browser.
+        container.style.transition = "none";
+        container.style.width = "auto";
+        const newWidth = container.getBoundingClientRect().width;
+        container.style.width = oldWidth + "px"; // snap back — no paint happens yet
+
+        // Next frame: start width transition and word slide-in simultaneously
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          container.style.transition = `width 420ms ${EASE_IN}`;
+          container.style.width = newWidth + "px";
+          animateIn(inners);
+          // Once the width animation is done, release back to auto
+          setTimeout(() => {
+            container.style.transition = "none";
+            container.style.width = "auto";
+            busy = false;
+          }, 500);
+        }));
+      } else {
+        // Initial render or reduced-motion: just size naturally
+        container.style.transition = "none";
+        container.style.width = "auto";
+        if (!reducedMotion) animateIn(inners);
+        busy = false;
+      }
     }
 
     function rotate() {
       if (busy) return;
       busy = true;
+
+      // Pin current width so the container doesn't collapse during exit
+      const oldWidth = container.getBoundingClientRect().width;
+      container.style.transition = "none";
+      container.style.width = oldWidth + "px";
+
       const inners = [...container.querySelectorAll(".hero-rotate-inner")];
       if (!reducedMotion) {
         animateOut(inners, () => {
           currentIdx = (currentIdx + 1) % phrases.length;
-          show(currentIdx);
-          setTimeout(() => { busy = false; }, 500);
+          show(currentIdx, oldWidth);
         });
       } else {
         currentIdx = (currentIdx + 1) % phrases.length;
         show(currentIdx);
-        busy = false;
       }
     }
 
