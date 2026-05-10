@@ -59,7 +59,23 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color var(--dur-mid) var(--ease), color var(--dur-mid) var(--ease);
+  position: relative;
 }
+/* Page-wide aurora — same palette as the hero, fixed so it follows the scroll */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle 720px at 92% -6%,  rgba(37, 99, 235, 0.38), transparent 70%),
+    radial-gradient(circle 560px at 80% 28%,  rgba(124, 58, 237, 0.28), transparent 70%),
+    radial-gradient(circle 520px at 88% 62%,  rgba(245, 158, 11, 0.22), transparent 70%),
+    radial-gradient(circle 600px at 82% 96%,  rgba(37, 99, 235, 0.22), transparent 70%);
+  filter: blur(70px);
+}
+[data-theme="dark"] body::before { opacity: 0.55; }
 h1,h2,h3,h4 { font-family: var(--font-display); letter-spacing: -0.02em; line-height: 1.1; color: var(--color-primary); margin: 0; }
 p { margin: 0; }
 a { color: inherit; text-decoration: none; transition: color var(--dur-fast) var(--ease); }
@@ -77,6 +93,15 @@ button { font: inherit; cursor: pointer; color: inherit; }
   font-family: var(--font-display); font-size: 0.8125rem; font-weight: 500;
   letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-muted-fg); margin: 0 0 1rem;
 }
+.eyebrow--icon {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  color: var(--color-fg);
+}
+.eyebrow__icon {
+  width: 22px; height: 22px;
+  flex-shrink: 0;
+  letter-spacing: normal;
+}
 .accent-text { color: var(--color-accent); }
 
 /* Navigation */
@@ -92,30 +117,29 @@ button { font: inherit; cursor: pointer; color: inherit; }
 .nav__inner { display: flex; align-items: center; justify-content: space-between; height: var(--nav-h); gap: 24px; }
 .nav__brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-family: var(--font-display); letter-spacing: -0.01em; transition: color var(--dur-mid) var(--ease); }
 .nav__brand:hover { color: var(--color-accent); }
-.nav__links { display: none; gap: 28px; font-size: 0.9375rem; }
+.nav__links { display: none; gap: 22px; font-size: 0.9375rem; }
 .nav__links a {
   position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px;
+  border-radius: 999px;
   color: var(--color-muted-fg);
-  font-weight: 500;
-  padding-bottom: 3px;
-  transition: color var(--dur-mid) var(--ease);
+  transition: color var(--dur-mid) var(--ease), background-color var(--dur-mid) var(--ease);
 }
-.nav__links a::after {
-  content: "";
+.nav__links a svg { width: 20px; height: 20px; }
+.nav__links a .nav__label {
   position: absolute;
-  left: 0; bottom: 0;
-  width: 100%; height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: right center;
-  transition: transform var(--dur-mid) var(--ease);
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 .nav__links a:hover,
-.nav__links a.is-active { color: var(--color-primary); }
-.nav__links a:hover::after,
-.nav__links a.is-active::after {
-  transform: scaleX(1);
-  transform-origin: left center;
+.nav__links a.is-active {
+  color: var(--color-primary);
+  background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
 }
 @media (min-width: 768px) { .nav__links { display: flex; } }
 
@@ -146,7 +170,7 @@ button { font: inherit; cursor: pointer; color: inherit; }
   min-height: calc(100vh - var(--nav-h));
   display: flex;
   padding-top: clamp(2rem, 6vh, 4rem);
-  padding-bottom: clamp(2rem, 4vh, 3rem);
+  padding-bottom: clamp(6rem, 18vh, 11rem);
   overflow: hidden; isolation: isolate;
 }
 .hero__aurora {
@@ -233,7 +257,8 @@ button { font: inherit; cursor: pointer; color: inherit; }
   display: inline-flex; align-items: center; gap: 10px;
   padding: 0; border: 0; background: transparent;
   font-family: var(--font-body);
-  font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
+  font-size: clamp(1.125rem, 1.5vw, 1.375rem);
+  line-height: 1.45;
   color: var(--color-primary);
   cursor: pointer;
   align-self: end;
@@ -273,6 +298,8 @@ button { font: inherit; cursor: pointer; color: inherit; }
   color: var(--color-primary);
   line-height: 1.45;
   min-height: calc(1.45em * 2);
+  display: flex;
+  align-items: flex-end;
 }
 .hero__lede strong { color: var(--color-primary); font-weight: 600; }
 .hero__lede-text {
@@ -310,7 +337,7 @@ button { font: inherit; cursor: pointer; color: inherit; }
 
 /* Sections */
 .section { padding-block: var(--section-y); }
-.section--alt { background: var(--color-surface-alt); border-block: 1px solid var(--color-border); }
+.section--alt { background: transparent; }
 .section__head { margin-bottom: 2.5rem; }
 .section__head--centered { text-align: center; max-width: 720px; margin-inline: auto; margin-bottom: 3.5rem; }
 .section__title { font-size: clamp(1.875rem, 4vw, 3rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; }
@@ -360,13 +387,118 @@ button { font: inherit; cursor: pointer; color: inherit; }
 .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1.75rem; }
 .pill { padding: 6px 14px; border-radius: var(--radius-pill); border: 1px solid var(--color-border); background: var(--color-surface); font-size: 0.8125rem; font-weight: 500; color: var(--color-secondary); }
 
+/* About — two-column: text stack on left, large image on right */
+.about {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+@media (min-width: 960px) {
+  .about { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); }
+}
+.about__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  color: var(--color-primary);
+  margin: 0 0 1.5rem;
+}
+.about__lede {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: var(--color-secondary);
+  max-width: 56ch;
+}
+.about__lede strong { color: var(--color-primary); font-weight: 600; }
+.about__rule {
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  margin: 1.75rem 0;
+}
+.about__pills {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin: 0; padding: 0; list-style: none;
+}
+.about__pills li {
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  background: var(--color-muted);
+  color: var(--color-secondary);
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+.about__roles {
+  display: flex;
+  flex-direction: column;
+  margin: 0; padding: 0; list-style: none;
+}
+.about__roles li {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.about__roles li:last-child { border-bottom: 0; }
+@media (min-width: 640px) {
+  .about__roles li {
+    grid-template-columns: 1.1fr 1.2fr 0.8fr;
+    align-items: baseline;
+    gap: 1.5rem;
+  }
+}
+.about__role-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--color-primary);
+  font-size: 0.9375rem;
+}
+.about__role-company {
+  color: var(--color-muted-fg);
+  font-size: 0.9375rem;
+}
+.about__role-period {
+  font-family: var(--font-display);
+  font-feature-settings: "tnum";
+  color: var(--color-muted-fg);
+  font-size: 0.9375rem;
+  letter-spacing: 0.01em;
+}
+@media (min-width: 640px) { .about__role-period { text-align: right; } }
+.about__media {
+  --magnet-x: 0px; --magnet-y: 0px;
+  margin: 0;
+  width: 100%;
+  transform: translate3d(var(--magnet-x), var(--magnet-y), 0);
+  transition: transform var(--dur-mid) var(--ease);
+}
+.about__media-stack {
+  position: relative; width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-2);
+  overflow: hidden;
+  transition: transform var(--dur-mid) var(--ease), box-shadow var(--dur-mid) var(--ease);
+}
+.about__media-stack:hover { transform: translateY(-2px); box-shadow: var(--shadow-3); }
+.about__media-stack img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  opacity: 0;
+  transition: opacity 450ms var(--ease);
+}
+.about__media-stack img.is-active { opacity: 1; }
+
 /* Timeline */
 .timeline { position: relative; display: flex; flex-direction: column; gap: 1.5rem; max-width: 960px; margin-inline: auto; }
-.timeline__item { display: grid; gap: 1rem; grid-template-columns: 1fr; }
-@media (min-width: 860px) { .timeline__item { grid-template-columns: 220px 1fr; gap: 2rem; align-items: start; } }
-.timeline__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-@media (min-width: 860px) { .timeline__meta { padding-top: 1.5rem; flex-direction: column; align-items: flex-start; gap: 8px; } }
-.timeline__dates { font-family: var(--font-display); font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.04em; color: var(--color-muted-fg); font-feature-settings: "tnum"; }
+.timeline__item { display: block; }
 .tag {
   font-family: var(--font-display); font-size: 0.875rem; font-weight: 500;
   font-style: italic; letter-spacing: 0;
@@ -387,6 +519,50 @@ button { font: inherit; cursor: pointer; color: inherit; }
   border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-border));
 }
 @media (min-width: 720px) { .role-card { padding: 1.75rem 2rem; } }
+
+/* Incoming role — rotating conic-gradient border */
+@property --role-grad-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.role-card--incoming {
+  position: relative;
+  border-color: transparent;
+  background-clip: padding-box;
+  isolation: isolate;
+}
+.role-card--incoming::before {
+  content: "";
+  position: absolute;
+  inset: -1.5px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--role-grad-angle),
+    #2563EB,
+    #7C3AED,
+    #F59E0B,
+    #2563EB
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  z-index: -1;
+  animation: role-grad-spin 4s linear infinite;
+}
+@keyframes role-grad-spin {
+  to { --role-grad-angle: 360deg; }
+}
+/* Fallback for browsers without @property: keep a static gradient */
+@supports not (background: conic-gradient(from 0deg, red, red)) {
+  .role-card--incoming::before { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .role-card--incoming::before { animation: none; }
+}
 .role-card__head { display: flex; align-items: center; gap: 14px; margin-bottom: 0; }
 .role-card__logo {
   width: 48px; height: 48px; flex-shrink: 0;
@@ -418,6 +594,8 @@ button { font: inherit; cursor: pointer; color: inherit; }
 @media (min-width: 800px) { .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .work-card {
   --magnet-x: 0px; --magnet-y: 0px;
+  --card-scale: 1;
+  position: relative;
   display: flex; flex-direction: column; gap: 1rem;
   padding: 2rem 2rem 1.5rem;
   background: var(--color-surface);
@@ -425,12 +603,22 @@ button { font: inherit; cursor: pointer; color: inherit; }
   border-radius: var(--radius-lg);
   color: inherit; text-align: left;
   box-shadow: var(--shadow-1);
-  transform: translate3d(var(--magnet-x), var(--magnet-y), 0);
-  transition: border-color var(--dur-mid) var(--ease), box-shadow var(--dur-mid) var(--ease);
+  cursor: pointer;
+  filter: grayscale(1);
+  transform: translate3d(var(--magnet-x), var(--magnet-y), 0) scale(var(--card-scale));
+  transition:
+    filter 380ms var(--ease),
+    transform 380ms var(--ease),
+    box-shadow var(--dur-mid) var(--ease),
+    border-color var(--dur-mid) var(--ease);
+  will-change: transform, filter;
 }
-.work-card:hover {
-  border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-border));
+.work-card:hover,
+.work-card:focus-visible {
+  --card-scale: 1.04;
+  filter: grayscale(0);
   box-shadow: var(--shadow-3);
+  border-color: color-mix(in srgb, var(--color-accent) 25%, var(--color-border));
 }
 .work-card__head {
   display: flex; align-items: center; justify-content: space-between;
@@ -474,24 +662,43 @@ button { font: inherit; cursor: pointer; color: inherit; }
   color: var(--color-primary);
   margin: 0;
 }
-.work-card__cta {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 4px;
-  font-family: var(--font-display);
-  font-size: 0.875rem; font-weight: 500;
-  color: var(--color-muted-fg);
-  letter-spacing: 0.02em;
+/* Hide native cursor while hovering a project card so the custom one takes over */
+.work-card.is-cursor-active,
+.work-card.is-cursor-active *,
+.role-card--incoming.is-cursor-active,
+.role-card--incoming.is-cursor-active * { cursor: none; }
+
+/* Custom cursor — glass-morphism pill with GitHub mark, follows the mouse */
+.gh-cursor {
+  position: fixed; top: 0; left: 0; z-index: 99999;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 20px;
+  border-radius: 50px;
+  color: rgba(15, 15, 18, 0.95);
+  background: transparent;
+  border: 1.25px solid rgba(15, 15, 18, 0.6);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  box-shadow: none;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
   opacity: 0;
-  transform: translateY(4px);
-  transition: opacity var(--dur-mid) var(--ease), transform var(--dur-mid) var(--ease), color var(--dur-fast) var(--ease);
+  transition: opacity 220ms var(--ease);
+  will-change: left, top, opacity;
 }
-.work-card:hover .work-card__cta,
-.work-card:focus-visible .work-card__cta {
-  opacity: 1;
-  transform: translateY(0);
-  color: var(--color-accent);
+.gh-cursor.is-visible { opacity: 1; }
+.gh-cursor svg { width: 22px; height: 22px; flex-shrink: 0; }
+@media (pointer: coarse) {
+  .gh-cursor { display: none; }
 }
-.work-card__cta svg { width: 20px; height: 20px; }
+@media (prefers-reduced-motion: reduce) {
+  .gh-cursor { transition: none; }
+}
 
 /* Skills */
 .skills-grid { display: grid; gap: 1.25rem; grid-template-columns: 1fr; }
@@ -574,21 +781,42 @@ button { font: inherit; cursor: pointer; color: inherit; }
         <span class="nav__brand-name">Louis</span>
       </a>
       <nav class="nav__links" aria-label="Primary">
-        <a href="#about">About</a>
-        <a href="#experience">Experience</a>
-        <a href="#work">Work</a>
-        <a href="#contact">Contact</a>
+        <a href="#about" title="About">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>
+          </svg>
+          <span class="nav__label">About</span>
+        </a>
+        <a href="#experience" title="Experience">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="7" width="18" height="13" rx="2"/>
+            <path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/>
+            <path d="M3 12h18"/>
+          </svg>
+          <span class="nav__label">Experience</span>
+        </a>
+        <a href="#work" title="Work">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 2 3 7l9 5 9-5-9-5Z"/>
+            <path d="m3 12 9 5 9-5"/>
+            <path d="m3 17 9 5 9-5"/>
+          </svg>
+          <span class="nav__label">Work</span>
+        </a>
+        <a href="#contact" title="Contact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 6h16v12H4z"/>
+            <path d="m4 7 8 6 8-6"/>
+          </svg>
+          <span class="nav__label">Contact</span>
+        </a>
       </nav>
     </div>
   </header>
 
   <main id="main">
     <section id="top" class="hero">
-      <div class="hero__aurora" aria-hidden="true">
-        <span class="hero__aurora-blob hero__aurora-blob--1"></span>
-        <span class="hero__aurora-blob hero__aurora-blob--2"></span>
-        <span class="hero__aurora-blob hero__aurora-blob--3"></span>
-      </div>
       <div class="container hero__inner">
         <div class="hero__headline">
           <h1 class="hero__name">
@@ -609,45 +837,41 @@ button { font: inherit; cursor: pointer; color: inherit; }
     </section>
 
     <section id="about" class="section">
-      <div class="container section__grid">
-        <header class="section__head">
-          <p class="eyebrow">About me</p>
-          <figure class="about-photo" data-magnetic data-magnetic-strength="0.15" data-magnetic-max="18">
-            <div class="about-photo__stack" data-photo-carousel>
-              <img src="powerlifting.png" alt="Louis with the USF Powerlifting team" data-caption="Collegiate State 2025" class="is-active" />
-              <img src="group-night.jpg" alt="Louis with his Scholar of Finance cohort" data-caption="Scholar of Finance" loading="lazy" />
-              <img src="pnc-brian.png" alt="Louis with Brian from PNC Bank" data-caption="PNC Bank — with Brian" loading="lazy" />
-            </div>
-            <figcaption class="about-photo__caption">Collegiate State 2025</figcaption>
-          </figure>
-        </header>
-        <div class="section__body prose">
-          <p>
-            Undergraduate at the <strong>University of South Florida</strong>, training for a career in <strong>Finance</strong>.
+      <div class="container about">
+        <div class="about__main">
+          <h2 class="about__title">Meet Louis</h2>
+          <p class="about__lede">
+            My name is <strong>Nguyễn Việt Hưng</strong>, you can call me Louis. I am an undergraduate at the <strong>University of South Florida's Muma College of Business</strong>, actively pursuing a career in <strong>Finance</strong>. My work centers on valuation, financial modeling, and equity research. I leverage Python and SQL to drive sharper, data-informed analysis. Outside the markets, I am a Varsity Powerlifter, Florida's #8-ranked collegiate powerlifter.
           </p>
-          <p>
-            My work centers on <strong>valuation</strong>, <strong>financial modeling</strong>, and <strong>equity research</strong>. I also use <strong>Python</strong> and <strong>SQL</strong> to sharpen the analysis, not as a separate identity.
-          </p>
-          <p>
-            Outside of Finance, I am <strong>Florida's #8-ranked collegiate powerlifter</strong>.
-          </p>
+
         </div>
+
+        <figure class="about__media" data-magnetic data-magnetic-strength="0.15" data-magnetic-max="18">
+          <div class="about__media-stack" data-photo-carousel>
+            <img src="powerlifting.png" alt="Louis with the USF Powerlifting team" data-caption="Collegiate State 2025" class="is-active" />
+            <img src="group-night.jpg" alt="Louis with his Scholar of Finance cohort" data-caption="Scholar of Finance" loading="lazy" />
+            <img src="pnc-brian.png" alt="Louis with Brian from PNC Bank" data-caption="PNC Bank — with Brian" loading="lazy" />
+          </div>
+        </figure>
       </div>
     </section>
 
     <section id="experience" class="section section--alt">
       <div class="container">
         <header class="section__head section__head--centered">
-          <p class="eyebrow">My Experience</p>
+          <p class="eyebrow eyebrow--icon">
+            <svg class="eyebrow__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="7" width="20" height="14" rx="2" />
+              <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              <path d="M2 13h20" />
+            </svg>
+            <span>Work</span>
+          </p>
         </header>
 
         <ol class="timeline" role="list">
           <li class="timeline__item">
-            <div class="timeline__meta">
-              <span class="timeline__dates">Sep 2026 — Dec 2026</span>
-              <span class="tag tag--incoming">Incoming</span>
-            </div>
-            <article class="role-card" data-magnetic data-magnetic-strength="0.4" data-magnetic-max="40">
+            <article class="role-card role-card--incoming" data-magnetic data-magnetic-strength="0.4" data-magnetic-max="40">
               <header class="role-card__head">
                 <img class="role-card__logo" src="https://www.google.com/s2/favicons?domain=nmrk.com&sz=128" alt="Newmark logo" width="48" height="48" loading="lazy" />
                 <div class="role-card__text">
@@ -659,11 +883,7 @@ button { font: inherit; cursor: pointer; color: inherit; }
           </li>
 
           <li class="timeline__item">
-            <div class="timeline__meta">
-              <span class="timeline__dates">May 2026 — Aug 2026</span>
-              <span class="tag tag--incoming">Incoming</span>
-            </div>
-            <article class="role-card" data-magnetic data-magnetic-strength="0.4" data-magnetic-max="40">
+            <article class="role-card role-card--incoming" data-magnetic data-magnetic-strength="0.4" data-magnetic-max="40">
               <header class="role-card__head">
                 <img class="role-card__logo" src="https://www.google.com/s2/favicons?domain=southstatebank.com&sz=128" alt="SouthState Bank logo" width="48" height="48" loading="lazy" />
                 <div class="role-card__text">
@@ -675,8 +895,6 @@ button { font: inherit; cursor: pointer; color: inherit; }
           </li>
 
           <li class="timeline__item">
-            <div class="timeline__meta">
-              <span class="timeline__dates">Mar 2026 — Present</span>            </div>
             <article class="role-card" data-magnetic data-magnetic-strength="0.4" data-magnetic-max="40">
               <header class="role-card__head">
                 <img class="role-card__logo" src="https://www.google.com/s2/favicons?domain=gousfbulls.com&sz=128" alt="University of South Florida logo" width="48" height="48" loading="lazy" />
@@ -689,8 +907,6 @@ button { font: inherit; cursor: pointer; color: inherit; }
           </li>
 
           <li class="timeline__item">
-            <div class="timeline__meta">
-              <span class="timeline__dates">Sep 2024 — Present</span>            </div>
             <article class="role-card" data-magnetic data-magnetic-strength="0.4" data-magnetic-max="40">
               <header class="role-card__head">
                 <img class="role-card__logo" src="https://www.google.com/s2/favicons?domain=gousfbulls.com&sz=128" alt="USF Athletics logo" width="48" height="48" loading="lazy" />
@@ -703,9 +919,6 @@ button { font: inherit; cursor: pointer; color: inherit; }
           </li>
 
           <li class="timeline__item">
-            <div class="timeline__meta">
-              <span class="timeline__dates">Dec 2025 — Feb 2026</span>
-            </div>
             <article class="role-card" data-magnetic data-magnetic-strength="0.4" data-magnetic-max="40">
               <header class="role-card__head">
                 <img class="role-card__logo" src="data:image/jpeg;base64,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cwTRdRdk/FFrDPzP3C+y2VLpWc8KhEfxLHC/yoW2wFsB4CKWRKVt5oHm17JjdKFmOyDDI8G2xyinp+Ov/8QAJxABAAEEAQMDBQEBAAAAAAAAAREAITFBUWFxgRCRwSBAcNHwobH/2gAIAQEAAT8h/MTkQEqtitfGhvZS6/g3tE+2UXmxz4Y2/sqcXsvfmO7L6H6OP9AYHRoS6CWiyjQ35Gw+0meWn2Hh9w+TikIFLAbpWIvCDsCHZSsjbHlF82RnrT9iy0GaKvufJfwZPHoagJWA/uKNx1KY9UzHiinN8gTT0+loi0SJeHKhh6VuzqnBPB6RGpoWYmk6z76ELktj6ujfqN7LW4Xb+ZvXRijWxpJb8defVCdutTtlmJGzN59HNSh4AT0PTSmSPlHy1ZhjBwCcHkq/7abTOBBlX9zV0oiw9hVYdafkSiLAymgq5CtB0BYIOaSrMGUWCOpd8U3qCF0f6inaa/oc+gS8ywvF3mpe2yUtNuSgy7KiYYm+b1y1TMDOcQ128ClQhvYq9ajcXJX0mHCPzxd+bo8+E43NSKIGY6BurIjU7y0ey8vuDwc0hIhcTVRDNCOerI7t6Hb5OEsRK6e9fRvGhLJjmPPHftSAX5Y6Br/aQRMpywskYYz/AMoXkjTHMxAd6MBzZkrAvtWaYjLDihjC3DM1mAzqiuEAwU3hJ3609FqsWIxolPb0YCIsQ5OfQSzurIeiQf0VfgCBapqWw4JpdCCwCMnNBNAiaDO0+SsC4bJTlCR5rTkiQEWp/ZhRebPPlrZ+ioxewd+I7MPph8Bpg+YHotFdC25Lwk+23ciQhEs1v40t7qHyKDgdArNyAzeGp82RchlgWLq+fzr/AP/aAAwDAQACAAMAAAAQ88888888888888888888888888888888888888888888888888884w88888888888MwY8w88w8888w8YossoQ4sMowAIwg888888888888888888888888888888888888888888888888888888888888888888888888888//EABQRAQAAAAAAAAAAAAAAAAAAAHD/2gAIAQMBAT8QKf/EABQRAQAAAAAAAAAAAAAAAAAAAHD/2gAIAQIBAT8QKf/EACYQAQEAAgICAQMEAwAAAAAAAAERACExQVFhECBAgXBxkcGhsfD/2gAIAQEAAT8Q/WJ1jhwByq8GIipoSfFVh+SQhCiqR2Jp6+2PlCeEK73sDNghFBF1heF0Bdj+8+FQ/qyAT+CFHxhtUtLSqcbfAl0H2pieDqZg/YvzA6Y/kQKqeAML6184UFpfKHYZLcClANigQAogRRM5PnClC+TUThFHnCkyc2Ws+aHv4aSB0PgPKqgCqoArjchtU+JnTu7esRhpOmxiAIIigT6ZIzhhsivgBa1nUY/5W9zYRd8mufgwpT0UAB5OwzUZ323U7aFNqHf1doQZB8tpSzTw2av+3ibtvzct+2x83v4/cxFrLEOyVXCNGldsSUlWppXYjbd3n4QsSL4I/AB8A62ADAOAyx0gOnOhbLSEEQdk5yqQhrahQkeC+TCGjfDROAuoKh1tOx/7SsqCCLARmKG07FjLDeeXXIyt433tn9SOQAP42oz2L8DH/G8vgC5DxqCSaceMqrqQYoq8nI84Sr7VK7V3VIPgxHGUnoRweJLTnKH6DI13ZBgAIaxiqjy7uPWJ3NDbCOgqIdrCWC9ESg39IFFaSFCYlNJkDwdDMH7k+YnTH8iJxRwj05BLakAgX2dCuVXeWAC0jgQVMVy+jdzadfzDWg7fZJUCRc4Le+q26qPxk/j9VASqhQIku1yfYHAjQWtGvzkmLOjO4B0K71jU2gknPAvZja1w3SDK1RtQNOL24eGCNF1DrEFpRZWFcJdUPwLKP68RE0RGnk+NVxZjmcqwk3t0KSy8D5OW9gNRjeT6ntVaJpEaeTChiVubJg9F7POG5nCdhwrgKdnRMZdwnR9sEoLyh5GH5QnlCOtaAXKA0UFdYXhdITZ/rPg+vJC0V7Ng7ERRCtMWAvTq9bOEGn227rHDkHkR5MRNTSk+arPSDZNwgD0Gf5k0dxo/xlpE7WsiUQhtTy/rr//Z" alt="GenAI Fund logo" width="48" height="48" loading="lazy" />
@@ -723,7 +936,14 @@ button { font: inherit; cursor: pointer; color: inherit; }
     <section id="work" class="section">
       <div class="container">
         <header class="section__head section__head--centered">
-          <p class="eyebrow">Selected Work</p>
+          <p class="eyebrow eyebrow--icon">
+            <svg class="eyebrow__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 2 2 7l10 5 10-5-10-5z" />
+              <path d="M2 17l10 5 10-5" />
+              <path d="M2 12l10 5 10-5" />
+            </svg>
+            <span>Project</span>
+          </p>
         </header>
 
         <div class="work-grid">
@@ -738,9 +958,6 @@ button { font: inherit; cursor: pointer; color: inherit; }
               <div><dt>Date</dt><dd>Feb 2026</dd></div>
               <div><dt>Tools</dt><dd>DCF · Comps · PowerPoint</dd></div>
             </dl>
-            <span class="work-card__cta" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-            </span>
           </a>
 
           <a class="work-card" href="https://github.com/nvhung010606/snowflakewebsite" target="_blank" rel="noopener noreferrer" data-type="equity-research" data-magnetic data-magnetic-strength="0.25" data-magnetic-max="22">
@@ -753,9 +970,6 @@ button { font: inherit; cursor: pointer; color: inherit; }
               <div><dt>Date</dt><dd>Oct 2025</dd></div>
               <div><dt>Tools</dt><dd>DCF · WACC · Python · Matplotlib</dd></div>
             </dl>
-            <span class="work-card__cta" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-            </span>
           </a>
 
           <a class="work-card" href="https://github.com/nvhung010606/macro-event-tracker" target="_blank" rel="noopener noreferrer" data-type="macro quantitative" data-magnetic data-magnetic-strength="0.25" data-magnetic-max="22">
@@ -768,9 +982,6 @@ button { font: inherit; cursor: pointer; color: inherit; }
               <div><dt>Date</dt><dd>Nov 2025 — Feb 2026</dd></div>
               <div><dt>Tools</dt><dd>Python · Statistical Modeling · Data Pipeline</dd></div>
             </dl>
-            <span class="work-card__cta" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-            </span>
           </a>
 
           <a class="work-card" href="https://github.com/nvhung010606/Python_Data_Analytics" target="_blank" rel="noopener noreferrer" data-type="quantitative" data-magnetic data-magnetic-strength="0.25" data-magnetic-max="22">
@@ -783,9 +994,6 @@ button { font: inherit; cursor: pointer; color: inherit; }
               <div><dt>Date</dt><dd>May 2025 — Aug 2025</dd></div>
               <div><dt>Tools</dt><dd>Python · Pandas · NumPy · SQL</dd></div>
             </dl>
-            <span class="work-card__cta" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-            </span>
           </a>
 
         </div>
@@ -808,7 +1016,7 @@ button { font: inherit; cursor: pointer; color: inherit; }
             <span class="contact-card__label">
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.13 1.45-2.13 2.94v5.66H9.35V9.04h3.41v1.56h.04c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.26 2.37 4.26 5.44v6.26zM5.34 7.48c-1.14 0-2.06-.93-2.06-2.06s.92-2.06 2.06-2.06 2.06.93 2.06 2.06-.92 2.06-2.06 2.06zm1.78 12.97H3.56V9.04h3.56v11.41zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
             </span>
-            <div class="contact-card__value">/in/viethungnguyenusf</div>
+            <div class="contact-card__value">Louis (Hung) Nguyen</div>
             <svg class="contact-card__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
           </a>
         </div>
@@ -1064,6 +1272,71 @@ button { font: inherit; cursor: pointer; color: inherit; }
       })();
     }
   }
+
+  // Custom glass-pill cursor — GitHub on .work-card, "Incoming" on .role-card--incoming
+  (function initWorkCardCursor() {
+    const cards = document.querySelectorAll(".work-card, .role-card--incoming");
+    if (!cards.length) return;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+
+    const GH_ICON =
+      '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
+      '<path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>' +
+      "</svg>";
+    const GH_LABEL = "Github";
+    const INC_LABEL = "Incoming";
+
+    const cursor = document.createElement("div");
+    cursor.className = "gh-cursor";
+    cursor.setAttribute("aria-hidden", "true");
+    document.body.appendChild(cursor);
+
+    let activeCard = null;
+    let activeMode = null;
+
+    const setMode = (mode) => {
+      if (mode === activeMode) return;
+      activeMode = mode;
+      if (mode === "incoming") {
+        cursor.innerHTML = '<span>' + INC_LABEL + '</span>';
+      } else {
+        cursor.innerHTML = GH_ICON + '<span>' + GH_LABEL + '</span>';
+      }
+    };
+
+    document.addEventListener("mousemove", (e) => {
+      const rect = cursor.getBoundingClientRect();
+      cursor.style.left = (e.clientX - rect.width  / 2) + "px";
+      cursor.style.top  = (e.clientY - rect.height / 2) + "px";
+
+      const el = e.target instanceof Element ? e.target : null;
+      const card = el
+        ? (el.closest(".work-card") || el.closest(".role-card--incoming"))
+        : null;
+      if (card) {
+        const mode = card.classList.contains("role-card--incoming") ? "incoming" : "github";
+        if (activeCard !== card) {
+          if (activeCard) activeCard.classList.remove("is-cursor-active");
+          activeCard = card;
+          activeCard.classList.add("is-cursor-active");
+          setMode(mode);
+          cursor.classList.add("is-visible");
+        }
+      } else if (activeCard) {
+        activeCard.classList.remove("is-cursor-active");
+        activeCard = null;
+        cursor.classList.remove("is-visible");
+      }
+    });
+
+    document.addEventListener("mouseleave", () => {
+      if (activeCard) {
+        activeCard.classList.remove("is-cursor-active");
+        activeCard = null;
+      }
+      cursor.classList.remove("is-visible");
+    });
+  })();
 })();
   </script>
 </body>
