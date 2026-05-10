@@ -305,16 +305,14 @@ button { font: inherit; cursor: pointer; color: inherit; }
 .hero__lede-static { display: inline; }
 /* RotatingText — highlighted pill container */
 .hero-rotate {
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0;
+  display: inline;
   margin-left: 0.3em;
-  padding: 0.1em 0.5em 0.12em;
+  padding: 0.12em 0.5em 0.14em;
   background: rgba(37, 99, 235, 0.08);
   border: 1px solid rgba(37, 99, 235, 0.18);
   border-radius: 8px;
-  vertical-align: baseline;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 .hero-rotate-word {
   display: inline-block;
