@@ -217,7 +217,7 @@ button { font: inherit; cursor: pointer; color: inherit; }
   margin: 0;
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(4.5rem, 16vw, 13rem);
+  font-size: clamp(3rem, 9vw, 7.5rem);
   line-height: 0.88;
   letter-spacing: -0.045em;
   color: var(--color-primary);
@@ -302,26 +302,20 @@ button { font: inherit; cursor: pointer; color: inherit; }
   align-items: flex-end;
 }
 .hero__lede strong { color: var(--color-primary); font-weight: 600; }
-.hero__lede-text {
+.hero__lede-static { display: inline; }
+/* RotatingText word-clip container */
+.hero-rotate {
+  display: inline;
+}
+.hero-rotate-word {
   display: inline-block;
-  will-change: opacity, transform;
+  overflow: hidden;
+  vertical-align: bottom;
+  line-height: 1.2;
 }
-.hero__lede-text.is-shifting-out {
-  animation: lede-shift-out 220ms var(--ease) forwards;
-}
-.hero__lede-text.is-shifting-in {
-  animation: lede-shift-in 280ms var(--ease);
-}
-@keyframes lede-shift-out {
-  to { opacity: 0; transform: translateY(-14px); }
-}
-@keyframes lede-shift-in {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero__lede-text.is-shifting-out,
-  .hero__lede-text.is-shifting-in { animation: none; }
+.hero-rotate-inner {
+  display: inline-block;
+  will-change: transform, opacity;
 }
 .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; }
 .hero__stats {
@@ -831,7 +825,7 @@ button { font: inherit; cursor: pointer; color: inherit; }
           <button type="button" class="hero__email" data-copy="nvhung010606@gmail.com" aria-label="Copy email address">
             <span class="hero__email-text">nvhung010606@gmail.com</span>
           </button>
-          <p class="hero__lede"><span class="hero__lede-text">I am an undergraduate from <strong>Vietnam🇻🇳</strong> studying at the <strong>University of South Florida</strong>, with a focus on <strong>valuation</strong>, <strong>credit</strong>, and <strong>equity research</strong>.</span></p>
+          <p class="hero__lede"><span class="hero__lede-static">I am </span><span class="hero-rotate" aria-live="polite" aria-atomic="true">interested in <strong>valuation</strong>, <strong>credit</strong>, and <strong>equity research🏦</strong></span></p>
         </div>
       </div>
     </section>
@@ -1209,28 +1203,104 @@ button { font: inherit; cursor: pointer; color: inherit; }
     });
   });
 
-  // Hero lede — text-shifting carousel (fade + vertical slide)
-  const lede = document.querySelector(".hero__lede-text");
-  if (lede && !reducedMotion) {
-    const messages = [
-      `I am from <strong>Vietnam🇻🇳</strong>`,
-      `I am an undergraduate at the <strong>University of South Florida🤘</strong>`,
-      `I am interested in <strong>valuation</strong>, <strong>credit</strong>, and <strong>equity research🏦</strong>`
+  // RotatingText — word-by-word slide animation ("I am" is static)
+  (function () {
+    const container = document.querySelector(".hero-rotate");
+    if (!container) return;
+
+    const phrases = [
+      `from <strong>Vietnam🇻🇳</strong>`,
+      `an undergraduate at the <strong>University of South Florida🤘</strong>`,
+      `interested in <strong>valuation</strong>, <strong>credit</strong>, and <strong>equity research🏦</strong>`
     ];
-    let idx = 0;
-    lede.innerHTML = messages[0];
-    setInterval(() => {
-      idx = (idx + 1) % messages.length;
-      lede.classList.remove("is-shifting-in");
-      lede.classList.add("is-shifting-out");
-      setTimeout(() => {
-        lede.innerHTML = messages[idx];
-        lede.classList.remove("is-shifting-out");
-        lede.classList.add("is-shifting-in");
-        setTimeout(() => lede.classList.remove("is-shifting-in"), 290);
-      }, 220);
-    }, 2000);
-  }
+
+    let currentIdx = 0;
+    let busy = false;
+    const EASE_IN  = "cubic-bezier(0.22, 1, 0.36, 1)";
+    const EASE_OUT = "cubic-bezier(0.55, 0, 0.45, 1)";
+
+    // Parse phrase HTML into [{html, isSpace}] word chunks
+    function parseWords(html) {
+      const tmp = document.createElement("div");
+      tmp.innerHTML = html;
+      const chunks = [];
+      tmp.childNodes.forEach(node => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          node.textContent.split(/(\s+)/).forEach(part => {
+            if (!part) return;
+            chunks.push({ html: /^\s+$/.test(part) ? " " : part.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"), isSpace: /^\s+$/.test(part) });
+          });
+        } else {
+          chunks.push({ html: node.outerHTML, isSpace: false });
+        }
+      });
+      return chunks;
+    }
+
+    function buildDOM(chunks) {
+      container.innerHTML = "";
+      chunks.forEach(c => {
+        if (c.isSpace) {
+          container.appendChild(document.createTextNode(" "));
+        } else {
+          const word = document.createElement("span");
+          word.className = "hero-rotate-word";
+          const inner = document.createElement("span");
+          inner.className = "hero-rotate-inner";
+          inner.innerHTML = c.html;
+          word.appendChild(inner);
+          container.appendChild(word);
+        }
+      });
+    }
+
+    function animateIn(inners) {
+      inners.forEach((el, i) => {
+        el.style.transform = "translateY(110%)";
+        el.style.opacity = "0";
+        el.style.transition = "none";
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          el.style.transition = `transform 420ms ${EASE_IN} ${i * 38}ms, opacity 260ms ${EASE_IN} ${i * 38}ms`;
+          el.style.transform = "translateY(0)";
+          el.style.opacity = "1";
+        }));
+      });
+    }
+
+    function animateOut(inners, done) {
+      inners.forEach((el, i) => {
+        el.style.transition = `transform 260ms ${EASE_OUT} ${i * 28}ms, opacity 200ms ${EASE_OUT} ${i * 28}ms`;
+        el.style.transform = "translateY(-110%)";
+        el.style.opacity = "0";
+      });
+      setTimeout(done, inners.length * 28 + 280);
+    }
+
+    function show(idx) {
+      buildDOM(parseWords(phrases[idx]));
+      if (!reducedMotion) animateIn([...container.querySelectorAll(".hero-rotate-inner")]);
+    }
+
+    function rotate() {
+      if (busy) return;
+      busy = true;
+      const inners = [...container.querySelectorAll(".hero-rotate-inner")];
+      if (!reducedMotion) {
+        animateOut(inners, () => {
+          currentIdx = (currentIdx + 1) % phrases.length;
+          show(currentIdx);
+          setTimeout(() => { busy = false; }, 500);
+        });
+      } else {
+        currentIdx = (currentIdx + 1) % phrases.length;
+        show(currentIdx);
+        busy = false;
+      }
+    }
+
+    show(0);
+    setInterval(rotate, 3500);
+  })();
 
   // Magnetic hover (desktop only, respects reduced-motion)
   const fineHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
